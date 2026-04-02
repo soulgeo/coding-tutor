@@ -1,7 +1,7 @@
 import Layout from "../layout/Layout"
 import CodeEditor from "../ui/CodeEditor"
 
-function Home() {
+function HomePage() {
   return (
     <Layout>
       <div className="flex flex-row w-full text-xl font-bold p-4">
@@ -20,4 +20,4 @@ function Home() {
   )
 }
 
-export default Home
+export default HomePage

@@ -2,7 +2,7 @@ import { Editor, type OnMount } from "@monaco-editor/react";
 import { useRef, useState } from "react";
 
 interface Props {
-  pretypedCode: string;
+  pretypedCode?: string;
 }
 
 const CodeEditor = ({pretypedCode}: Props) => {
