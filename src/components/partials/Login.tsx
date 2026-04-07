@@ -10,21 +10,18 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const onLogin = async () => {
-    try {
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password,
-      );
-      navigate("/dashboard");
-    } catch (error: unknown) {
-      if (error instanceof FirebaseError) {
-        console.log(error.code, error.message);
-      } else {
-        console.error("An unexpected error occurred", error);
-      }
-    }
+  const onLogin = () => {
+    signInWithEmailAndPassword(auth, email, password)
+      .then(() => {
+        navigate("/dashboard");
+      })
+      .catch((error: unknown) => {
+        if (error instanceof FirebaseError) {
+          console.log(error.code, error.message);
+        } else {
+          console.error("An unexpected error occurred", error);
+        }
+      });
   };
 
   return (
