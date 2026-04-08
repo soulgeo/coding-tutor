@@ -1,4 +1,4 @@
-import { Link } from "react-router"
+import { Link} from "react-router"
 import Layout from "../layout/Layout"
 import { useRef } from "react"
 import Login from "../partials/Login"

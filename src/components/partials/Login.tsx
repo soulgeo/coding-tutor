@@ -10,7 +10,9 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const onLogin = () => {
+  const onSubmit = (e: React.SubmitEvent) => {
+    e.preventDefault();
+
     signInWithEmailAndPassword(auth, email, password)
       .then(() => {
         navigate("/dashboard");
@@ -27,21 +29,25 @@ const Login = () => {
   return (
     <Card>
       <div className="w-full p-2 text-center font-bold">Sign In</div>
-      <input
-        type="text"
-        className="input input-ghost w-full"
-        placeholder="Email"
-        onChange={(e) => setEmail(e.target.value)}
-      ></input>
-      <input
-        type="password"
-        className="input input-ghost w-full"
-        placeholder="Password"
-        onChange={(e) => setPassword(e.target.value)}
-      ></input>
-      <button className="btn btn-primary mt-2" onClick={onLogin}>
-        Sign In
-      </button>
+      <form onSubmit={onSubmit} className="flex flex-col gap-4">
+        <input
+          type="text"
+          className="input input-ghost w-full"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        ></input>
+        <input
+          type="password"
+          className="input input-ghost w-full"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        ></input>
+        <button type="submit" className="btn btn-primary mt-2">
+          Sign In
+        </button>
+      </form>
     </Card>
   );
 };

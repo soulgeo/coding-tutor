@@ -4,7 +4,7 @@ import { auth } from "../firebase";
 import type { User } from "firebase/auth";
 
 interface AuthContextType {
-  user?: User;
+  currentUser: User | null;
   userLoggedIn: boolean;
   loading: boolean;
 }
@@ -17,7 +17,21 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // eslint-disable-next-line react-refresh/only-export-components
 export function useAuth() {
-  return useContext(AuthContext);
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
+}
+
+// eslint-disable-next-line react-refresh/only-export-components
+export function getCurrentUser(): Promise<User | null> {
+  return new Promise((resolve) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      unsubscribe();
+      resolve(user);
+    });
+  });
 }
 
 export function AuthProvider({ children }: Props) {
