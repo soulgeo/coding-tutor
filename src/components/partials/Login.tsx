@@ -28,7 +28,7 @@ const Login = () => {
 
   return (
     <Card>
-      <div className="w-full p-2 text-center font-bold">Sign In</div>
+      <div className="w-full p-2 text-center font-bold">Log In</div>
       <form onSubmit={onSubmit} className="flex flex-col gap-4">
         <input
           type="text"
@@ -45,7 +45,7 @@ const Login = () => {
           onChange={(e) => setPassword(e.target.value)}
         ></input>
         <button type="submit" className="btn btn-primary mt-2">
-          Sign In
+          Log In
         </button>
       </form>
     </Card>
