@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { useAuth } from "../../context/AuthContext";
 import Logout from "../partials/Logout";
+import profileImageUrl from "../../assets/profile.svg"
 
 const Navbar = () => {
   const { userLoggedIn } = useAuth();
@@ -26,8 +27,8 @@ const Navbar = () => {
             >
               <div className="w-10 rounded-full">
                 <img
-                  alt="{{ user.username }}"
-                  src="{{ user.profile.image_url }}"
+                  alt="user_profile"
+                  src={profileImageUrl}
                 />
               </div>
             </div>
