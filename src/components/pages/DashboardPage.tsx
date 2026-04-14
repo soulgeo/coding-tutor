@@ -9,6 +9,39 @@ import type { UserData } from "../../context/UserData";
 const DashboardPage = () => {
   const [userData, setUserData] = useState<UserData | null>(null);
 
+  const units = [
+    {
+      name: "Unit 1",
+      description: "Your First Python Program",
+      exercisesTotal: 10,
+      exercisesComplete: 6,
+    },
+    {
+      name: "Unit 2",
+      description: "Your First Python Program",
+      exercisesTotal: 10,
+      exercisesComplete: 2,
+    },
+    {
+      name: "Unit 3",
+      description: "Your First Python Program",
+      exercisesTotal: 10,
+      exercisesComplete: 0,
+    },
+    {
+      name: "Unit 4",
+      description: "Your First Python Program",
+      exercisesTotal: 10,
+      exercisesComplete: 0,
+    },
+    {
+      name: "Unit 5",
+      description: "Your First Python Program",
+      exercisesTotal: 10,
+      exercisesComplete: 0,
+    },
+  ]
+
   const fetchUserData = useEffectEvent(async () => {
     const user = await getCurrentUser();
     if (user === null) {
@@ -36,7 +69,7 @@ const DashboardPage = () => {
           </div>
           <div className="text-center text-lg mb-10">Continue where you left off...</div>
           <AutoGrid
-            items={["This", "Is", "A", "Test", "And", "It", "Looks", "Right"]}
+            units={units}
           ></AutoGrid>
         </>
       ) : (

@@ -1,14 +1,15 @@
+import type { UnitProgress } from "../../data/unitProgress";
+import CourseUnit from "./CourseUnit";
+
 interface AutoGridProps {
-  items: React.ReactNode[]; 
+  units: Array<UnitProgress> 
 }
 
-const AutoGrid = ({ items }: AutoGridProps) => {
+const AutoGrid = ({ units }: AutoGridProps) => {
   return (
     <div className="grid gap-8 grid-cols-[repeat(auto-fit,minmax(200px,1fr))] w-full">
-      {items.map((item, index) => (
-        <div key={index} className="p-4 bg-base-100 rounded shadow min-h-40">
-          {item}
-        </div>
+      {units.map((unit) => (
+        <CourseUnit unit={unit}/>
       ))}
     </div>
   );
