@@ -1,46 +1,15 @@
 import { useEffect, useEffectEvent, useState } from "react";
 import Layout from "../layout/Layout";
-import AutoGrid from "../ui/AutoGrid";
+import UnitsGrid from "../ui/UnitsGrid";
 import { getCurrentUser } from "../../context/AuthContext";
-import { doc, getDoc } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { db } from "../../firebase";
-import type { UserData } from "../../context/UserData";
+import type { UserData } from "../../data/userData";
+import type { Unit } from "../../data/courseData";
 
 const DashboardPage = () => {
   const [userData, setUserData] = useState<UserData | null>(null);
-
-  const units = [
-    {
-      name: "Unit 1",
-      description: "Your First Python Program",
-      exercisesTotal: 10,
-      exercisesComplete: 6,
-    },
-    {
-      name: "Unit 2",
-      description: "Your First Python Program",
-      exercisesTotal: 10,
-      exercisesComplete: 2,
-    },
-    {
-      name: "Unit 3",
-      description: "Your First Python Program",
-      exercisesTotal: 10,
-      exercisesComplete: 0,
-    },
-    {
-      name: "Unit 4",
-      description: "Your First Python Program",
-      exercisesTotal: 10,
-      exercisesComplete: 0,
-    },
-    {
-      name: "Unit 5",
-      description: "Your First Python Program",
-      exercisesTotal: 10,
-      exercisesComplete: 0,
-    },
-  ]
+  const [units, setUnits] = useState<Record<string, Unit> | null>(null);
 
   const fetchUserData = useEffectEvent(async () => {
     const user = await getCurrentUser();
@@ -52,12 +21,27 @@ const DashboardPage = () => {
     if (docSnap.exists()) {
       setUserData(docSnap.data() as UserData);
     } else {
-      console.log("User is not logged in");
+      console.error("User is not logged in");
     }
+  });
+
+  const fetchUnitData = useEffectEvent(async () => {
+    const colRef = collection(db, "units");
+    const colSnap = await getDocs(colRef);
+    const units = colSnap.docs.reduce(
+      (acc, doc) => {
+        acc[doc.id] = doc.data() as Unit;
+        return acc;
+      },
+      {} as Record<string, Unit>,
+    );
+
+    setUnits(units);
   });
 
   useEffect(() => {
     fetchUserData();
+    fetchUnitData();
   }, []);
 
   return (
@@ -67,10 +51,13 @@ const DashboardPage = () => {
           <div className="text-center font-bold text-4xl mt-10 mb-5">
             {userData.displayName}'s Dashboard
           </div>
-          <div className="text-center text-lg mb-10">Continue where you left off...</div>
-          <AutoGrid
+          <div className="text-center text-lg mb-10">
+            Continue where you left off...
+          </div>
+          <UnitsGrid
             units={units}
-          ></AutoGrid>
+            unitsProgress={userData.unitsProgress}
+          ></UnitsGrid>
         </>
       ) : (
         <p>Loading...</p>
