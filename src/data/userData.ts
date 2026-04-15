@@ -2,10 +2,10 @@ import { Timestamp } from "firebase/firestore";
 
 export interface UnitProgress {
   isComplete: boolean;
-  completedExercises: Array<string>;
+  completedLessons: Array<string>;
 }
 
-export interface ExerciseProgress {
+export interface LessonProgress {
   failedAttempts: number,
 }
 

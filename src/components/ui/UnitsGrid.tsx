@@ -4,11 +4,11 @@ import CourseUnit from "./CourseUnit";
 
 interface AutoGridProps {
   units: Record<string, Unit> | null;
-  unitsProgress: Record<string, UnitProgress> | undefined;
+  unitsProgress: Record<string, UnitProgress>;
 }
 
 const UnitsGrid = ({ units, unitsProgress }: AutoGridProps) => {
-  if (!units || unitsProgress === undefined) return;
+  if (!units) return;
 
   const unitsData: Array<Unit & UnitProgress> = [];
   Object.keys(units).forEach((uid, i) => {
@@ -17,6 +17,13 @@ const UnitsGrid = ({ units, unitsProgress }: AutoGridProps) => {
         unitsData[i] = { ...units[uid], ...unitsProgress[upid] };
       }
     });
+    if (unitsData[i] === undefined) {
+      unitsData[i] = {
+        ...units[uid],
+        isComplete: false,
+        completedLessons: [],
+      };
+    }
   });
 
   return (

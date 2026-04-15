@@ -46,7 +46,7 @@ const DashboardPage = () => {
 
   return (
     <Layout>
-      {userData ? (
+      {(userData && units) ? (
         <>
           <div className="text-center font-bold text-4xl mt-10 mb-5">
             {userData.displayName}'s Dashboard

@@ -1,9 +1,9 @@
 export interface Unit {
   name: string,
   description: string,
-  exercises: Array<string>,
+  lessons: Array<string>,
 }
 
-export interface Exercise {
+export interface Lesson {
   unit_id: number,
 }
