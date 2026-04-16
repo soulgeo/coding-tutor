@@ -7,13 +7,17 @@ interface Props {
 }
 
 const CourseUnit = ({ unitData }: Props) => {
-  const completionRatio =
-    unitData.completedLessons.length / unitData.lessons.length;
+  const totalLessons = unitData.lessons;
+  const completed = unitData.completedLessons;
 
-  const target = "";
+  const completionRatio =
+    totalLessons.length > 0 ? completed.length / totalLessons.length : 0;
+
+  const nextLessonId =
+    totalLessons.find((id) => !completed.includes(id)) || totalLessons[0];
 
   return (
-    <Link to={target} className="block">
+    <Link to={`/lessons/${nextLessonId}/`} className="block">
       <div className="flex flex-col gap-2 p-4 bg-base-100 rounded shadow min-h-40">
         <h2 className="text-lg font-bold">{unitData.name}</h2>
         <p className="text-sm">{unitData.description}</p>

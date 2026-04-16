@@ -2,14 +2,19 @@ import Navbar from "./Navbar";
 
 interface Props {
   children: React.ReactNode;
+  fullWidth?: boolean;
 }
 
-const Layout = ({ children }: Props) => {
+const Layout = ({ children, fullWidth }: Props) => {
   return (
     <>
       <Navbar />
-      <div className="flex flex-col items-center w-full overscroll-none bg-base-300 h-screen pt-20">
-        <main className="flex flex-col w-full max-w-5xl px-4 items-center">
+      <div
+        className={`flex flex-col items-center w-full overscroll-none bg-base-300 h-full min-h-screen pt-20`}
+      >
+        <main
+          className={`flex flex-col w-full ${fullWidth ? "" : "max-w-5xl px-4"} items-center`}
+        >
           {children}
         </main>
       </div>

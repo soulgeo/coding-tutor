@@ -2,13 +2,14 @@ import { createBrowserRouter, redirect, RouterProvider } from "react-router";
 import HomePage from "./components/pages/HomePage";
 import DashboardPage from "./components/pages/DashboardPage";
 import { AuthProvider, getCurrentUser } from "./context/AuthContext";
+import LessonPage from "./components/pages/LessonPage";
 
 async function requireAuthLoader() {
   const user = await getCurrentUser();
   if (!user) {
     return redirect("/");
   }
-  return user
+  return user;
 }
 
 async function requireNoAuthLoader() {
@@ -16,7 +17,7 @@ async function requireNoAuthLoader() {
   if (user) {
     return redirect("/dashboard");
   }
-  return user
+  return user;
 }
 
 const router = createBrowserRouter([
@@ -30,7 +31,12 @@ const router = createBrowserRouter([
     path: "/dashboard",
     element: <DashboardPage />,
     loader: requireAuthLoader,
-  }
+  },
+  {
+    path: "/lessons/:id",
+    element: <LessonPage />,
+    loader: requireAuthLoader,
+  },
 ]);
 
 const App = () => {
@@ -38,7 +44,7 @@ const App = () => {
     <AuthProvider>
       <RouterProvider router={router} />
     </AuthProvider>
-  )
-}
+  );
+};
 
 export default App;
