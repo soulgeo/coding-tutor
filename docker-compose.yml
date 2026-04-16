@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: react_app
+    ports:
+      - 8000:8000
+    volumes:
+      - .:/app
+      - /app/node_modules
+    depends_on:
+      - piston-init
+  piston:
+    image: ghcr.io/engineer-man/piston:latest
+    privileged: true
+    ports:
+      - "2000:2000" # Expose Piston on port 2000
+    volumes:
+      - ./piston-data:/piston/packages # Persistent storage for runtimes
+    restart: always
+  piston-init:
+    image: curlimages/curl:latest
+    volumes:
+    - ./init-piston.sh:/init-piston.sh
+    entrypoint: ["/bin/sh", "/init-piston.sh"]
+    depends_on:
+    - piston
+    network_mode: "host"   
