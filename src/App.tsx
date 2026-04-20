@@ -3,8 +3,9 @@ import HomePage from "./components/pages/HomePage";
 import DashboardPage from "./components/pages/DashboardPage";
 import { AuthProvider, getCurrentUser } from "./context/AuthContext";
 import LessonPage from "./components/pages/LessonPage";
+import { UnitProvider } from "./context/UnitContext";
 
-async function requireAuthLoader() {
+const requireAuthLoader = async () => {
   const user = await getCurrentUser();
   if (!user) {
     return redirect("/");
@@ -12,7 +13,7 @@ async function requireAuthLoader() {
   return user;
 }
 
-async function requireNoAuthLoader() {
+const requireNoAuthLoader = async () => {
   const user = await getCurrentUser();
   if (user) {
     return redirect("/dashboard");
@@ -33,7 +34,7 @@ const router = createBrowserRouter([
     loader: requireAuthLoader,
   },
   {
-    path: "/lessons/:id",
+    path: "/units/:unitId/lessons/:id",
     element: <LessonPage />,
     loader: requireAuthLoader,
   },
@@ -42,7 +43,9 @@ const router = createBrowserRouter([
 const App = () => {
   return (
     <AuthProvider>
-      <RouterProvider router={router} />
+      <UnitProvider>
+        <RouterProvider router={router} />
+      </UnitProvider>
     </AuthProvider>
   );
 };

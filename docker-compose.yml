@@ -4,8 +4,7 @@ services:
   app:
     build: .
     container_name: react_app
-    ports:
-      - 8000:8000
+    network_mode: "host"
     volumes:
       - .:/app
       - /app/node_modules
@@ -13,17 +12,17 @@ services:
       - piston-init
   piston:
     image: ghcr.io/engineer-man/piston:latest
+    container_name: piston
     privileged: true
-    ports:
-      - "2000:2000" # Expose Piston on port 2000
+    network_mode: "host"
     volumes:
       - ./piston-data:/piston/packages # Persistent storage for runtimes
     restart: always
   piston-init:
     image: curlimages/curl:latest
+    network_mode: "host"
     volumes:
     - ./init-piston.sh:/init-piston.sh
     entrypoint: ["/bin/sh", "/init-piston.sh"]
     depends_on:
     - piston
-    network_mode: "host"   
