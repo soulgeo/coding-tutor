@@ -1,6 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
 @import "tailwindcss";
+
+@theme {
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
 
 @plugin "@tailwindcss/typography";
 @plugin "daisyui" {
     themes: light --default, dark --prefersdark;
+}
+
+.prose pre {
+  padding: 0 !important;
+  margin: 0 !important;
+  background-color: transparent !important;
 }

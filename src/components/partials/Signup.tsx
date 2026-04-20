@@ -30,7 +30,7 @@ const Signup = () => {
             email: email,
             displayName: displayName,
             createdAt: serverTimestamp(),
-            courseProgress: {}
+            unitsProgress: {}
           })
 
           navigate("/dashboard");

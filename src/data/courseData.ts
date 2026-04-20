@@ -7,4 +7,6 @@ export interface Unit {
 export interface Lesson {
   title: string;
   content: string;
+  expectedOutput: string;
+  pretypedCode: string;
 }

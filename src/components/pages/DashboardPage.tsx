@@ -1,17 +1,18 @@
-import { useEffect, useEffectEvent, useState } from "react";
+import { useEffect, useCallback, useState } from "react";
 import Layout from "../layout/Layout";
 import UnitsGrid from "../ui/UnitsGrid";
 import { getCurrentUser } from "../../context/AuthContext";
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 import type { UserData } from "../../data/userData";
-import type { Unit } from "../../data/courseData";
+import { useUnits } from "../../context/UnitContext";
+import Loading from "../ui/Loading";
 
 const DashboardPage = () => {
   const [userData, setUserData] = useState<UserData | null>(null);
-  const [units, setUnits] = useState<Record<string, Unit> | null>(null);
+  const { units, loading: unitsLoading } = useUnits();
 
-  const fetchUserData = useEffectEvent(async () => {
+  const fetchUserData = useCallback(async () => {
     const user = await getCurrentUser();
     if (user === null) {
       return;
@@ -23,30 +24,15 @@ const DashboardPage = () => {
     } else {
       console.error("User is not logged in");
     }
-  });
-
-  const fetchUnitData = useEffectEvent(async () => {
-    const colRef = collection(db, "units");
-    const colSnap = await getDocs(colRef);
-    const units = colSnap.docs.reduce(
-      (acc, doc) => {
-        acc[doc.id] = doc.data() as Unit;
-        return acc;
-      },
-      {} as Record<string, Unit>,
-    );
-
-    setUnits(units);
-  });
+  }, []);
 
   useEffect(() => {
     fetchUserData();
-    fetchUnitData();
-  }, []);
+  }, [fetchUserData]);
 
   return (
     <Layout>
-      {(userData && units) ? (
+      {(userData && units && !unitsLoading) ? (
         <>
           <div className="text-center font-bold text-4xl mt-10 mb-5">
             {userData.displayName}'s Dashboard
@@ -60,7 +46,7 @@ const DashboardPage = () => {
           ></UnitsGrid>
         </>
       ) : (
-        <p>Loading...</p>
+        <Loading />
       )}
     </Layout>
   );

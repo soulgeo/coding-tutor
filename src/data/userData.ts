@@ -1,7 +1,6 @@
 import { Timestamp } from "firebase/firestore";
 
 export interface UnitProgress {
-  isComplete: boolean;
   completedLessons: Array<string>;
 }
 

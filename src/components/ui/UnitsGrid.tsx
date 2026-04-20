@@ -12,13 +12,14 @@ const UnitsGrid = ({ units, unitsProgress }: Props) => {
 
   const unitsData = Object.entries(units).map(([uid, unit]) => ({
     ...unit,
-    ...(unitsProgress[uid] ?? { isComplete: false, completedLessons: [] }),
+    uid,
+    ...(unitsProgress[uid] ?? { completedLessons: [] }),
   }));
 
   return (
     <div className="grid gap-8 grid-cols-[repeat(auto-fit,minmax(200px,1fr))] w-full">
       {unitsData.map((unitData) => (
-        <CourseUnit unitData={unitData} />
+        <CourseUnit key={unitData.uid} unitData={unitData} />
       ))}
     </div>
   );

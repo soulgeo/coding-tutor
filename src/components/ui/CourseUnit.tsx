@@ -3,7 +3,7 @@ import type { Unit } from "../../data/courseData";
 import type { UnitProgress } from "../../data/userData";
 
 interface Props {
-  unitData: Unit & UnitProgress;
+  unitData: Unit & UnitProgress & { uid: string };
 }
 
 const CourseUnit = ({ unitData }: Props) => {
@@ -17,7 +17,7 @@ const CourseUnit = ({ unitData }: Props) => {
     totalLessons.find((id) => !completed.includes(id)) || totalLessons[0];
 
   return (
-    <Link to={`/lessons/${nextLessonId}/`} className="block">
+    <Link to={`/units/${unitData.uid}/lessons/${nextLessonId}/`} className="block">
       <div className="flex flex-col gap-2 p-4 bg-base-100 rounded shadow min-h-40">
         <h2 className="text-lg font-bold">{unitData.name}</h2>
         <p className="text-sm">{unitData.description}</p>
