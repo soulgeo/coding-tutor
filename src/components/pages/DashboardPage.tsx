@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useState } from "react";
+import { useEffect, useState } from "react";
 import Layout from "../layout/Layout";
 import UnitsGrid from "../ui/UnitsGrid";
 import { getCurrentUser } from "../../context/AuthContext";
@@ -12,23 +12,31 @@ const DashboardPage = () => {
   const [userData, setUserData] = useState<UserData | null>(null);
   const { units, loading: unitsLoading } = useUnits();
 
-  const fetchUserData = useCallback(async () => {
-    const user = await getCurrentUser();
-    if (user === null) {
-      return;
-    }
-    const docRef = doc(db, "users", user.uid);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      setUserData(docSnap.data() as UserData);
-    } else {
-      console.error("User is not logged in");
-    }
-  }, []);
-
   useEffect(() => {
+    let active = true;
+
+    const fetchUserData = async () => {
+      const user = await getCurrentUser();
+      if (user === null) {
+        return;
+      }
+      const docRef = doc(db, "users", user.uid);
+      const docSnap = await getDoc(docRef);
+      if (active) {
+        if (docSnap.exists()) {
+          setUserData(docSnap.data() as UserData);
+        } else {
+          console.error("User is not logged in");
+        }
+      }
+    };
+
     fetchUserData();
-  }, [fetchUserData]);
+
+    return () => {
+      active = false;
+    };
+  }, []);
 
   return (
     <Layout>

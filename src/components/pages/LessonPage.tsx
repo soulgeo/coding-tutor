@@ -2,7 +2,7 @@ import { Link, useParams } from "react-router";
 import Layout from "../layout/Layout";
 import CodeEditor, { DEFAULT_CODE } from "../ui/CodeEditor";
 import { arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore";
-import { useEffect, useCallback, useState, useMemo } from "react";
+import { useEffect, useState, useMemo } from "react";
 import type { Lesson } from "../../data/courseData";
 import { db } from "../../firebase";
 import MarkdownRenderer from "../ui/MarkdownRenderer";
@@ -21,20 +21,32 @@ const LessonPage = () => {
   const [stdout, setStdout] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const fetchLessonData = useCallback(async () => {
-    if (!id) {
-      return;
-    }
-    const docRef = doc(db, "lessons", id);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      const data = docSnap.data() as Lesson;
-      setLessonData(data);
-      setCode(data.pretypedCode || DEFAULT_CODE);
-      setStdout(""); // Reset stdout for new lesson
-    } else {
-      console.error(`Lesson with id ${id} doesn't exist`);
-    }
+  useEffect(() => {
+    let active = true;
+
+    const loadLessonData = async () => {
+      if (!id) return;
+
+      const docRef = doc(db, "lessons", id);
+      const docSnap = await getDoc(docRef);
+
+      if (active) {
+        if (docSnap.exists()) {
+          const data = docSnap.data() as Lesson;
+          setLessonData(data);
+          setCode(data.pretypedCode || DEFAULT_CODE);
+          setStdout(""); // Reset stdout for new lesson
+        } else {
+          console.error(`Lesson with id ${id} doesn't exist`);
+        }
+      }
+    };
+
+    loadLessonData();
+
+    return () => {
+      active = false;
+    };
   }, [id]);
 
   const runCode = async () => {
@@ -67,10 +79,6 @@ const LessonPage = () => {
       console.error("Submit Error:", error);
     }
   };
-
-  useEffect(() => {
-    fetchLessonData();
-  }, [fetchLessonData]);
 
   const navigation = useMemo(() => {
     if (!units || !unitId || !id) return { prevLink: "", nextLink: "" };

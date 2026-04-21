@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, useCallback } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 import type { Unit } from "../data/courseData";
@@ -27,28 +27,38 @@ export const UnitProvider = ({ children }: Props) => {
   const [units, setUnits] = useState<Record<string, Unit> | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const fetchUnits = useCallback(async () => {
-    try {
-      const colRef = collection(db, "units");
-      const colSnap = await getDocs(colRef);
-      const unitsData = colSnap.docs.reduce(
-        (acc, doc) => {
-          acc[doc.id] = doc.data() as Unit;
-          return acc;
-        },
-        {} as Record<string, Unit>,
-      );
-      setUnits(unitsData);
-    } catch (error) {
-      console.error("Error fetching units:", error);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
   useEffect(() => {
+    let active = true;
+
+    const fetchUnits = async () => {
+      try {
+        const colRef = collection(db, "units");
+        const colSnap = await getDocs(colRef);
+        const unitsData = colSnap.docs.reduce(
+          (acc, doc) => {
+            acc[doc.id] = doc.data() as Unit;
+            return acc;
+          },
+          {} as Record<string, Unit>,
+        );
+        if (active) {
+          setUnits(unitsData);
+        }
+      } catch (error) {
+        console.error("Error fetching units:", error);
+      } finally {
+        if (active) {
+          setLoading(false);
+        }
+      }
+    };
+
     fetchUnits();
-  }, [fetchUnits]);
+
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const value = {
     units,
