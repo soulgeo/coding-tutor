@@ -1,5 +1,5 @@
 import { Toaster } from "react-hot-toast";
-import Navbar from "./Navbar";
+import Navbar from "./Navbar/Navbar";
 
 interface Props {
   children: React.ReactNode;

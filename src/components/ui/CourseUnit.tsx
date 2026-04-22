@@ -19,11 +19,14 @@ const CourseUnit = ({ unitData }: Props) => {
   return (
     <Link to={`/units/${unitData.uid}/lessons/${nextLessonId}/`} className="block">
       <div className="flex flex-col gap-2 p-4 bg-base-100 rounded shadow min-h-40">
-        <h2 className="text-lg font-bold">{unitData.name}</h2>
+        <div className="flex flex-row justify-between">
+          <h3 className="text-lg font-bold">{unitData.name}</h3>
+          <p>{completed.length} / {totalLessons.length}</p>
+        </div>
         <p className="text-sm">{unitData.description}</p>
-        <div className="mt-4 border border-base-content h-4 min-h-4">
+        <div className="mt-4 border border-accent h-4 min-h-4 rounded-lg">
           <div
-            className="bg-base-content h-full"
+            className="bg-base-content h-full rounded-lg"
             style={
               {
                 width: `${100 * completionRatio}%`,
