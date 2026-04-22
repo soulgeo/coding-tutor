@@ -48,10 +48,12 @@ const DashboardPage = () => {
           <div className="text-center text-lg mb-10">
             Continue where you left off...
           </div>
-          <UnitsGrid
-            units={units}
-            unitsProgress={userData.unitsProgress}
-          ></UnitsGrid>
+          <div className="w-full mb-40">
+            <UnitsGrid
+              units={units}
+              unitsProgress={userData.unitsProgress}
+            ></UnitsGrid>
+          </div>
         </>
       ) : (
         <Loading />

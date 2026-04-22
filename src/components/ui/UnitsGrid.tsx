@@ -17,9 +17,9 @@ const UnitsGrid = ({ units, unitsProgress }: Props) => {
   }));
 
   return (
-    <div className="grid gap-8 grid-cols-[repeat(auto-fit,minmax(200px,1fr))] w-full">
-      {unitsData.map((unitData) => (
-        <CourseUnit key={unitData.uid} unitData={unitData} />
+    <div className="grid gap-8 grid-cols-[repeat(auto-fit,minmax(350px,1fr))] w-full">
+      {unitsData.map((unitData, i) => (
+        <CourseUnit key={unitData.uid} unitData={unitData} index={i + 1} />
       ))}
     </div>
   );
