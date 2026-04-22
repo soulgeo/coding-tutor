@@ -127,6 +127,7 @@ const LessonPage = () => {
             unitId={unitId}
             lessonId={id}
             currentLesson={lessonData}
+            isCompleted={isCompleted}
           />
           <div className="flex flex-col md:flex-row w-full gap-4 p-4 md:h-180">
             <div className="bg-base-100 w-full h-full flex-1 p-4 md:overflow-y-auto mb-4 rounded-lg">
@@ -154,7 +155,7 @@ const LessonPage = () => {
                   Submit
                 </button>
               </div>
-              <div className="h-2/5 bg-base-200 p-4 rounded-lg font-mono overflow-auto whitespace-pre-wrap break-all">
+              <div className="h-2/5 bg-base-200 p-4 rounded-lg font-mono overflow-auto whitespace-pre-wrap break-all min-h-40">
                 {loading ? <Loading size="sm" /> : stdout}
               </div>
             </div>

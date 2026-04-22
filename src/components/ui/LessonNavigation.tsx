@@ -10,9 +10,10 @@ interface Props {
   unitId?: string;
   lessonId?: string;
   currentLesson: Lesson;
+  isCompleted: boolean;
 }
 
-const LessonNavigation = ({ unitId, lessonId, currentLesson }: Props) => {
+const LessonNavigation = ({ unitId, lessonId, currentLesson, isCompleted }: Props) => {
   const { units } = useUnits();
   const [lessonsInUnit, setLessonsInUnit] = useState<
     { id: string; title: string }[]
@@ -83,7 +84,7 @@ const LessonNavigation = ({ unitId, lessonId, currentLesson }: Props) => {
           role="button"
           className="btn btn-ghost btn-sm md:btn-md normal-case"
         >
-          <span className="hidden md:inline">U{currentUnitNumber}:</span>{" "}
+          U{currentUnitNumber}:{" "}
           {units?.[unitId || ""]?.name || "Loading..."}
         </div>
         <ul
@@ -103,7 +104,7 @@ const LessonNavigation = ({ unitId, lessonId, currentLesson }: Props) => {
         </ul>
       </div>
 
-      <div className="dropdown dropdown-end">
+      <div className="hidden md:inline-block dropdown dropdown-end">
         <div
           tabIndex={0}
           role="button"
@@ -150,7 +151,7 @@ const LessonNavigation = ({ unitId, lessonId, currentLesson }: Props) => {
         {nextLink ? (
           <Link
             to={nextLink}
-            className="btn btn-primary btn-circle btn-sm md:btn-md"
+            className={`btn ${isCompleted ? "btn-accent" : "btn-primary"} btn-circle btn-sm md:btn-md`}
           >
             <ChevronRight size={20} />
           </Link>
