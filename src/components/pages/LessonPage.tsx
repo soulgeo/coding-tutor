@@ -13,6 +13,15 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import Loading from "../ui/Loading";
 import toast from "react-hot-toast";
 
+const SUCCESS_MESSAGES = [
+  "Correct!",
+  "Spot on!",
+  "You nailed it!",
+  "Awesome job!",
+  "Great work!",
+  "Keep it up!",
+];
+
 const LessonPage = () => {
   const { unitId, id } = useParams();
   const { units, loading: unitsLoading } = useUnits();
@@ -68,7 +77,9 @@ const LessonPage = () => {
       const stdout = await executePythonCode(code);
 
       if (stdout.trim() === lessonData?.expectedOutput.trim()) {
-        toast.success("Correct!")
+        const randomMessage =
+          SUCCESS_MESSAGES[Math.floor(Math.random() * SUCCESS_MESSAGES.length)];
+        toast.success(randomMessage);
         await updateDoc(doc(db, "users", user.uid), {
           [`unitsProgress.${unitId}.completedLessons`]: arrayUnion(id),
         });
