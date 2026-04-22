@@ -1,0 +1,38 @@
+[
+  {
+    "id": "unit01",
+    "name": "Python Foundations",
+    "description": "Master the basic building blocks: output, math, and variables.",
+    "lessons": ["u01_lsn01", "u01_lsn02", "u01_lsn03", "u01_lsn04", "u01_lsn05", "u01_lsn06", "u01_lsn07"]
+  },
+  {
+    "id": "unit02",
+    "name": "Decision Making",
+    "description": "Control the flow of your program using logic and conditionals.",
+    "lessons": ["u02_lsn01", "u02_lsn02", "u02_lsn03", "u02_lsn04", "u02_lsn05", "u02_lsn06", "u02_lsn07"]
+  },
+  {
+    "id": "unit03",
+    "name": "Loops & Automation",
+    "description": "Learn to repeat tasks efficiently using while and for loops.",
+    "lessons": ["u03_lsn01", "u03_lsn02", "u03_lsn03", "u03_lsn04", "u03_lsn05", "u03_lsn06", "u03_lsn07"]
+  },
+  {
+    "id": "unit04",
+    "name": "Data Collections",
+    "description": "Organize and manage multiple pieces of data using lists.",
+    "lessons": ["u04_lsn01", "u04_lsn02", "u04_lsn03", "u04_lsn04", "u04_lsn05", "u04_lsn06", "u04_lsn07"]
+  },
+  {
+    "id": "unit05",
+    "name": "Reusable Tools",
+    "description": "Write cleaner code by creating your own reusable functions.",
+    "lessons": ["u05_lsn01", "u05_lsn02", "u05_lsn03", "u05_lsn04", "u05_lsn05", "u05_lsn06", "u05_lsn07"]
+  },
+  {
+    "id": "unit06",
+    "name": "Building Projects",
+    "description": "Apply your skills to build non-interactive Python applications.",
+    "lessons": ["u06_lsn01", "u06_lsn02", "u06_lsn03", "u06_lsn04", "u06_lsn05", "u06_lsn06"]
+  }
+]
