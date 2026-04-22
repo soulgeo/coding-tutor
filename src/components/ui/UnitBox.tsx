@@ -7,7 +7,7 @@ interface Props {
   index: number;
 }
 
-const CourseUnit = ({ unitData, index }: Props) => {
+const UnitBox = ({ unitData, index }: Props) => {
   const totalLessons = unitData.lessons;
   const completed = unitData.completedLessons;
 
@@ -47,4 +47,4 @@ const CourseUnit = ({ unitData, index }: Props) => {
   );
 };
 
-export default CourseUnit;
+export default UnitBox;
