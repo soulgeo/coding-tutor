@@ -12,6 +12,7 @@ import { useUnits } from "../../context/UnitContext.tsx";
 import Loading from "../ui/Loading";
 import toast from "react-hot-toast";
 import LessonNavigation from "../ui/LessonNavigation";
+import ProgressBar from "../ui/ProgressBar";
 import type { UserData } from "../../data/userData";
 
 const SUCCESS_MESSAGES = [
@@ -25,12 +26,13 @@ const SUCCESS_MESSAGES = [
 
 const LessonPage = () => {
   const { unitId, id } = useParams();
-  const { loading: unitsLoading } = useUnits();
+  const { units, loading: unitsLoading } = useUnits();
   const [lessonData, setLessonData] = useState<Lesson | null>(null);
   const [code, setCode] = useState("");
   const [stdout, setStdout] = useState("");
   const [loading, setLoading] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
+  const [completedLessons, setCompletedLessons] = useState<string[]>([]);
 
   useEffect(() => {
     let active = true;
@@ -72,9 +74,10 @@ const LessonPage = () => {
 
       if (active && userDocSnap.exists()) {
         const userData = userDocSnap.data() as UserData;
-        const completedLessons =
+        const completed =
           userData.unitsProgress?.[unitId]?.completedLessons || [];
-        setIsCompleted(completedLessons.includes(id));
+        setCompletedLessons(completed);
+        setIsCompleted(completed.includes(id));
       }
     };
 
@@ -110,6 +113,7 @@ const LessonPage = () => {
         await updateDoc(doc(db, "users", user.uid), {
           [`unitsProgress.${unitId}.completedLessons`]: arrayUnion(id),
         });
+        setCompletedLessons((prev) => Array.from(new Set([...prev, id])));
         setIsCompleted(true);
       } else {
         toast.error(`Incorrect, try again.`);
@@ -119,16 +123,33 @@ const LessonPage = () => {
     }
   };
 
+  const totalLessonsInUnit = (unitId && units?.[unitId]?.lessons.length) || 0;
+  const sortedUnitIds = Object.keys(units || {}).sort();
+  const currentUnitNumber = sortedUnitIds.indexOf(unitId || "") + 1;
+
   return (
     <Layout fullWidth={true}>
       {lessonData && !unitsLoading ? (
         <>
-          <LessonNavigation
-            unitId={unitId}
-            lessonId={id}
-            currentLesson={lessonData}
-            isCompleted={isCompleted}
-          />
+          <div className="flex flex-row justify-between items-center w-full px-6">
+            <div className="flex flex-row items-center gap-4 w-1/4 md:w-1/3">
+              <span className="text-sm font-bold hidden sm:inline whitespace-nowrap">
+                Unit {currentUnitNumber} Progress:
+              </span>
+              <ProgressBar
+                completed={completedLessons.length}
+                total={totalLessonsInUnit}
+                className="w-full"
+              />
+            </div>
+
+            <LessonNavigation
+              unitId={unitId}
+              lessonId={id}
+              currentLesson={lessonData}
+              isCompleted={isCompleted}
+            />
+          </div>
           <div className="flex flex-col md:flex-row w-full gap-4 p-4 md:h-180">
             <div className="bg-base-100 w-full h-full flex-1 p-4 md:overflow-y-auto mb-4 rounded-lg">
               <MarkdownRenderer content={lessonData.content} />

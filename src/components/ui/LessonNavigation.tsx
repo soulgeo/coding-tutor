@@ -77,7 +77,7 @@ const LessonNavigation = ({ unitId, lessonId, currentLesson, isCompleted }: Prop
   const { prevLink, nextLink } = navigation;
 
   return (
-    <div className="flex flex-row justify-end items-center w-full px-4 gap-2">
+    <div className="flex flex-row justify-end items-center gap-2">
       <div className="dropdown dropdown-end">
         <div
           tabIndex={0}

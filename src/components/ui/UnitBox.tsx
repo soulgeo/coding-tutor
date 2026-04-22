@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import type { Unit } from "../../data/courseData";
 import type { UnitProgress } from "../../data/userData";
+import ProgressBar from "./ProgressBar";
 
 interface Props {
   unitData: Unit & UnitProgress & { uid: string };
@@ -10,9 +11,6 @@ interface Props {
 const UnitBox = ({ unitData, index }: Props) => {
   const totalLessons = unitData.lessons;
   const completed = unitData.completedLessons;
-
-  const completionRatio =
-    totalLessons.length > 0 ? completed.length / totalLessons.length : 0;
 
   const nextLessonId =
     totalLessons.find((id) => !completed.includes(id)) || totalLessons[0];
@@ -32,16 +30,11 @@ const UnitBox = ({ unitData, index }: Props) => {
           </p>
         </div>
         <p className="text-sm">{unitData.description}</p>
-        <div className="mt-4 border border-accent h-4 min-h-4 rounded-lg">
-          <div
-            className="bg-base-content h-full rounded-lg"
-            style={
-              {
-                width: `${100 * completionRatio}%`,
-              } as React.CSSProperties
-            }
-          />
-        </div>
+        <ProgressBar
+          completed={completed.length}
+          total={totalLessons.length}
+          className="mt-4"
+        />
       </div>
     </Link>
   );
