@@ -1,7 +1,13 @@
 import { useParams } from "react-router";
 import Layout from "../layout/Layout";
 import CodeEditor, { DEFAULT_CODE } from "../ui/CodeEditor";
-import { arrayUnion, doc, getDoc, updateDoc, increment } from "firebase/firestore";
+import {
+  arrayUnion,
+  doc,
+  getDoc,
+  updateDoc,
+  increment,
+} from "firebase/firestore";
 import { useEffect, useState, useRef } from "react";
 import type { Lesson } from "../../data/courseData";
 import { db } from "../../firebase";
@@ -16,7 +22,8 @@ import ProgressBar from "../ui/ProgressBar";
 import type { UserData } from "../../data/userData";
 import { Play, HelpCircle } from "lucide-react";
 import HintModal, { type HintModalHandle } from "../ui/HintModal";
-import 'animate.css';
+import LessonTabs from "../ui/LessonTabs";
+import "animate.css";
 
 const SUCCESS_MESSAGES = [
   "Correct!",
@@ -38,6 +45,7 @@ const LessonPage = () => {
   const [completedLessons, setCompletedLessons] = useState<string[]>([]);
   const [isError, setIsError] = useState(false);
   const [failedAttempts, setFailedAttempts] = useState(0);
+  const [activeTab, setActiveTab] = useState<"lesson" | "editor">("lesson");
   const hintModalRef = useRef<HintModalHandle>(null);
 
   useEffect(() => {
@@ -164,11 +172,25 @@ const LessonPage = () => {
 
   const openHintModal = () => hintModalRef.current?.showModal();
 
+  // Layout Styles
+  const containerBase =
+    "flex flex-col md:flex-row w-full gap-4 p-4 mb-20 md:mb-0 pb-16 md:pb-0";
+  const mobileHeight =
+    activeTab === "lesson"
+      ? "overflow-y-auto"
+      : "h-[calc(100vh-210px)] overflow-hidden";
+  const desktopHeight =
+    "md:h-[calc(100vh-180px)] md:max-h-[720px] md:overflow-hidden";
+  const containerClasses = `${containerBase} ${mobileHeight} ${desktopHeight}`;
+
+  const lessonTabClasses = `bg-base-100 w-full md:w-1/2 h-fit md:h-full flex-1 p-4 md:overflow-y-auto mb-4 rounded-lg ${activeTab === "lesson" ? "block" : "hidden md:block"}`;
+  const editorTabClasses = `w-full md:w-1/2 flex flex-col gap-0 h-full ${activeTab === "editor" ? "flex" : "hidden md:flex"}`;
+
   return (
     <Layout fullWidth={true}>
       {lessonData && !unitsLoading ? (
         <>
-          <div className="flex flex-row justify-between items-center w-full px-6">
+          <div className="flex flex-row justify-between items-center w-full px-6 sticky top-15 z-40 bg-base-300 py-2">
             <div className="flex flex-row items-center gap-4 w-1/4 md:w-1/3">
               <span className="text-sm font-bold hidden md:inline whitespace-nowrap">
                 Unit {currentUnitNumber}:
@@ -187,19 +209,19 @@ const LessonPage = () => {
               isCompleted={isCompleted}
             />
           </div>
-          <div className="flex flex-col md:flex-row w-full gap-4 p-4 md:h-180">
-            <div className="bg-base-100 w-full h-full flex-1 p-4 md:overflow-y-auto mb-4 rounded-lg">
+          <div className={containerClasses}>
+            <div className={lessonTabClasses}>
               <MarkdownRenderer content={lessonData.content} />
             </div>
-            <div className="w-full md:w-32 flex-1 flex flex-col gap-0">
-              <div className="h-3/5">
+            <div className={editorTabClasses}>
+              <div className="flex-1 min-h-0">
                 <CodeEditor
                   pretypedCode={lessonData.pretypedCode}
                   value={code}
                   onChange={setCode}
                 />
               </div>
-              <div className="flex flex-row gap-2 py-4">
+              <div className="flex-none flex flex-row gap-2 py-4">
                 <button
                   onClick={runCode}
                   className="btn btn-primary rounded-full"
@@ -225,12 +247,14 @@ const LessonPage = () => {
                 )}
               </div>
               <div
-                className={`h-2/5 bg-base-200 p-4 rounded-lg font-mono overflow-auto whitespace-pre-wrap break-all min-h-40 ${isError ? "text-error" : ""}`}
+                className={`h-1/3 min-h-0 bg-base-200 p-4 rounded-lg font-mono overflow-auto whitespace-pre-wrap break-all ${isError ? "text-error" : ""}`}
               >
                 {loading ? <Loading size="sm" /> : output}
               </div>
             </div>
           </div>
+
+          <LessonTabs activeTab={activeTab} setActiveTab={setActiveTab} />
 
           <HintModal ref={hintModalRef} hint={lessonData.hint || ""} />
         </>
