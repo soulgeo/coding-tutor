@@ -1,0 +1,10 @@
+node_modules
+piston-data
+dist
+.git
+.gitignore
+Dockerfile
+docker-compose.yml
+README.md
+TODO.md
+npm-debug.log
