@@ -79,6 +79,7 @@ async function sync() {
       pretypedCode: metadata.pretypedCode || "",
       expectedOutput: String(metadata.expectedOutput ?? ""),
       successMessage: metadata.successMessage || "",
+      hint: metadata.hint || "",
       content: content
     }, { merge: true });
 

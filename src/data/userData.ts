@@ -12,5 +12,6 @@ export interface UserData {
   email: string;
   displayName: string;
   createdAt: Timestamp;
-  unitsProgress: Record<string, UnitProgress>; 
+  unitsProgress: Record<string, UnitProgress>;
+  lessonsProgress?: Record<string, LessonProgress>;
 }

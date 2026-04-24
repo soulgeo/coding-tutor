@@ -17,7 +17,7 @@ const UserDropdown = () => {
           <div
             tabIndex={0}
             role="button"
-            className="btn btn-neutral btn-circle avatar"
+            className="btn btn-ghost btn-circle avatar"
           >
             <div className="w-10 rounded-full">
               <img alt="user_profile" src={profileImageUrl} />

@@ -117,13 +117,13 @@ const LessonNavigation = ({ unitId, lessonId, currentLesson, isCompleted }: Prop
         {prevLink ? (
           <Link
             to={prevLink}
-            className="btn btn-primary btn-circle btn-sm md:btn-md w-15"
+            className="btn btn-primary btn-circle btn-sm md:btn-md w-15 hidden md:inline-flex"
           >
             <ChevronLeft size={20} />
           </Link>
         ) : (
           <button
-            className="btn btn-primary btn-circle btn-sm md:btn-md btn-disabled w-15"
+            className="btn btn-primary btn-circle btn-sm md:btn-md btn-disabled w-15 hidden md:inline-flex"
             disabled
           >
             <ChevronLeft size={20} />

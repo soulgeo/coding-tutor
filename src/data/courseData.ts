@@ -10,4 +10,5 @@ export interface Lesson {
   expectedOutput: string;
   pretypedCode: string;
   successMessage?: string;
+  hint?: string;
 }

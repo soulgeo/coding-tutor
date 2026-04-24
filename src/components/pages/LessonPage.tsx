@@ -1,8 +1,8 @@
 import { useParams } from "react-router";
 import Layout from "../layout/Layout";
 import CodeEditor, { DEFAULT_CODE } from "../ui/CodeEditor";
-import { arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { arrayUnion, doc, getDoc, updateDoc, increment } from "firebase/firestore";
+import { useEffect, useState, useRef } from "react";
 import type { Lesson } from "../../data/courseData";
 import { db } from "../../firebase";
 import MarkdownRenderer from "../ui/MarkdownRenderer";
@@ -14,7 +14,8 @@ import toast from "react-hot-toast";
 import LessonNavigation from "../ui/LessonNavigation";
 import ProgressBar from "../ui/ProgressBar";
 import type { UserData } from "../../data/userData";
-import { Play } from "lucide-react";
+import { Play, HelpCircle } from "lucide-react";
+import HintModal, { type HintModalHandle } from "../ui/HintModal";
 
 const SUCCESS_MESSAGES = [
   "Correct!",
@@ -35,6 +36,8 @@ const LessonPage = () => {
   const [isCompleted, setIsCompleted] = useState(false);
   const [completedLessons, setCompletedLessons] = useState<string[]>([]);
   const [isError, setIsError] = useState(false);
+  const [failedAttempts, setFailedAttempts] = useState(0);
+  const hintModalRef = useRef<HintModalHandle>(null);
 
   useEffect(() => {
     let active = true;
@@ -80,6 +83,7 @@ const LessonPage = () => {
           userData.unitsProgress?.[unitId]?.completedLessons || [];
         setCompletedLessons(completed);
         setIsCompleted(completed.includes(id));
+        setFailedAttempts(userData.lessonsProgress?.[id]?.failedAttempts || 0);
       }
     };
 
@@ -119,6 +123,10 @@ const LessonPage = () => {
         setIsError(true);
         setOutput(stderr);
         toast.error(`Incorrect, try again.`);
+        await updateDoc(doc(db, "users", user.uid), {
+          [`lessonsProgress.${id}.failedAttempts`]: increment(1),
+        });
+        setFailedAttempts((prev) => prev + 1);
         setLoading(false);
         return;
       } else {
@@ -134,10 +142,15 @@ const LessonPage = () => {
         toast.success(message);
         await updateDoc(doc(db, "users", user.uid), {
           [`unitsProgress.${unitId}.completedLessons`]: arrayUnion(id),
-        });        setCompletedLessons((prev) => Array.from(new Set([...prev, id])));
+        });
+        setCompletedLessons((prev) => Array.from(new Set([...prev, id])));
         setIsCompleted(true);
       } else {
         toast.error(`Incorrect, try again.`);
+        await updateDoc(doc(db, "users", user.uid), {
+          [`lessonsProgress.${id}.failedAttempts`]: increment(1),
+        });
+        setFailedAttempts((prev) => prev + 1);
       }
     } catch (error) {
       console.error("Submit Error:", error);
@@ -147,6 +160,8 @@ const LessonPage = () => {
   const totalLessonsInUnit = (unitId && units?.[unitId]?.lessons.length) || 0;
   const sortedUnitIds = Object.keys(units || {}).sort();
   const currentUnitNumber = sortedUnitIds.indexOf(unitId || "") + 1;
+
+  const openHintModal = () => hintModalRef.current?.showModal();
 
   return (
     <Layout fullWidth={true}>
@@ -198,6 +213,15 @@ const LessonPage = () => {
                   <Play size={16} />
                   Submit
                 </button>
+                {failedAttempts >= 2 && lessonData.hint && (
+                  <button
+                    onClick={openHintModal}
+                    className="btn btn-secondary rounded-full"
+                  >
+                    <HelpCircle size={16} />
+                    Hint
+                  </button>
+                )}
               </div>
               <div
                 className={`h-2/5 bg-base-200 p-4 rounded-lg font-mono overflow-auto whitespace-pre-wrap break-all min-h-40 ${isError ? "text-error" : ""}`}
@@ -206,6 +230,8 @@ const LessonPage = () => {
               </div>
             </div>
           </div>
+
+          <HintModal ref={hintModalRef} hint={lessonData.hint || ""} />
         </>
       ) : (
         <Loading />
