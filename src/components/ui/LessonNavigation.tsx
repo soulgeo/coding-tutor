@@ -96,7 +96,10 @@ const LessonNavigation = ({ unitId, lessonId, currentLesson, isCompleted }: Prop
         dropdownClassName="ml-4"
         buttonLabel={
           <>
-            U{currentUnitNumber}: {units?.[unitId || ""]?.name || "Loading..."}
+            <span className="md:hidden">Unit {currentUnitNumber}</span>
+            <span className="hidden md:inline">
+              U{currentUnitNumber}: {units?.[unitId || ""]?.name || "Loading..."}
+            </span>
           </>
         }
         items={unitDropdownItems}

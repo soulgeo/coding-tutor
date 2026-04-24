@@ -27,7 +27,7 @@ const NavDropdown = ({ buttonLabel, items, dropdownClassName = "" }: NavDropdown
       <div
         tabIndex={0}
         role="button"
-        className="btn btn-ghost btn-sm md:btn-md normal-case flex justify-between w-48 md:w-64 text-left"
+        className="btn btn-ghost btn-sm md:btn-md normal-case flex justify-between w-28 md:w-64 text-left"
       >
         <span className="truncate">{buttonLabel}</span>
         <ChevronDown size={16} className="ml-2 shrink-0" />
