@@ -1,7 +1,7 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import Card from "../ui/Card";
 import { auth, db } from "../../firebase";
-import { FormEvent, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import toast from "react-hot-toast";
@@ -19,7 +19,7 @@ const Signup = ({ closeModal, onShowLogin }: SignupProps) => {
   const [password2, setPassword2] = useState("");
   const navigate = useNavigate();
 
-  const onSubmit = (e: FormEvent) => {
+  const onSubmit = (e: React.SubmitEvent) => {
     e.preventDefault();
 
     if (password != password2) {
@@ -93,14 +93,14 @@ const Signup = ({ closeModal, onShowLogin }: SignupProps) => {
           Sign Up
         </button>
       </form>
-      <div className="mt-4 text-center text-sm">
+      <div className="mt-4 text-center text-sm text-base-content/60">
         Already have an account?{" "}
         <button
           onClick={(e) => {
             e.preventDefault();
             if (onShowLogin) onShowLogin();
           }}
-          className="link link-primary"
+          className="link link-hover text-primary font-medium"
         >
           Log In
         </button>

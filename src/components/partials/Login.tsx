@@ -1,7 +1,7 @@
 import { signInWithEmailAndPassword } from "firebase/auth";
 import Card from "../ui/Card";
 import { auth } from "../../firebase";
-import { FormEvent, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router";
 import toast from "react-hot-toast";
 import { getAuthErrorMessage } from "../../api/authErrors";
@@ -16,7 +16,7 @@ const Login = ({ closeModal, onShowSignup }: LoginProps) => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const onSubmit = (e: FormEvent) => {
+  const onSubmit = (e: React.SubmitEvent) => {
     e.preventDefault();
 
     const loginPromise = signInWithEmailAndPassword(auth, email, password);
@@ -57,14 +57,14 @@ const Login = ({ closeModal, onShowSignup }: LoginProps) => {
           Log In
         </button>
       </form>
-      <div className="mt-4 text-center text-sm">
+      <div className="mt-4 text-center text-sm text-base-content/60">
         Don't have an account?{" "}
         <button
           onClick={(e) => {
             e.preventDefault();
             if (onShowSignup) onShowSignup();
           }}
-          className="link link-primary"
+          className="link link-hover text-primary font-medium"
         >
           Sign Up
         </button>

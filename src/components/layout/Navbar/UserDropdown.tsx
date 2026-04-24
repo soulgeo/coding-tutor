@@ -4,16 +4,25 @@ import profileImageUrl from "../../../assets/profile.svg";
 import Logout from "../../partials/Logout";
 import Login from "../../partials/Login";
 import Signup from "../../partials/Signup";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 import 'animate.css';
 
 const UserDropdown = () => {
   const { userLoggedIn, showLogin, setShowLogin, showSignup, setShowSignup } =
     useAuth();
+  const location = useLocation();
 
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [isClosing, setIsClosing] = useState(false);
   const [mode, setMode] = useState<"login" | "signup" | "logout">("login");
+
+  // Close modal on route change
+  useEffect(() => {
+    dialogRef.current?.close();
+    setShowLogin(false);
+    setShowSignup(false);
+    setIsClosing(false);
+  }, [location.pathname, setShowLogin, setShowSignup]);
 
   // Keep modal in sync with context state
   useEffect(() => {
@@ -31,6 +40,14 @@ const UserDropdown = () => {
       setIsClosing(false);
     }
   }, [showSignup]);
+
+  useEffect(() => {
+    if (userLoggedIn && (showLogin || showSignup)) {
+      setShowLogin(false);
+      setShowSignup(false);
+      dialogRef.current?.close();
+    }
+  }, [userLoggedIn, showLogin, showSignup, setShowLogin, setShowSignup]);
 
   useEffect(() => {
     if ((showLogin || showSignup) && !isClosing) {

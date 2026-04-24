@@ -6,6 +6,8 @@ import { AuthProvider, getCurrentUser } from "./context/AuthContext";
 import LessonPage from "./components/pages/LessonPage";
 import { UnitProvider } from "./context/UnitContext";
 import ErrorPage from "./components/pages/ErrorPage";
+import { Toaster, resolveValue } from "react-hot-toast";
+import CustomToast from "./components/ui/CustomToast";
 
 const requireAuthLoader = async () => {
   const user = await getCurrentUser();
@@ -52,11 +54,31 @@ const router = createBrowserRouter([
 
 const App = () => {
   return (
-    <AuthProvider>
-      <UnitProvider>
-        <RouterProvider router={router} />
-      </UnitProvider>
-    </AuthProvider>
+    <>
+      <AuthProvider>
+        <UnitProvider>
+          <RouterProvider router={router} />
+        </UnitProvider>
+      </AuthProvider>
+      <Toaster
+        position="bottom-right"
+        containerStyle={{
+          bottom: "40px",
+          right: "20px",
+        }}
+        toastOptions={{
+          duration: 4000,
+        }}
+      >
+        {(t) => (
+          <CustomToast
+            t={t}
+            message={resolveValue(t.message, t)}
+            icon={t.icon}
+          />
+        )}
+      </Toaster>
+    </>
   );
 };
 

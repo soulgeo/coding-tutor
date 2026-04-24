@@ -1,7 +1,7 @@
 import { signOut } from "firebase/auth";
 import Card from "../ui/Card";
 import { auth } from "../../firebase";
-import { MouseEvent } from "react";
+import type { MouseEvent } from "react";
 import { useNavigate } from "react-router";
 import toast from "react-hot-toast";
 import { getAuthErrorMessage } from "../../api/authErrors";
