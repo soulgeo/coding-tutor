@@ -33,6 +33,6 @@
     "id": "unit06",
     "name": "Building Projects",
     "description": "Apply your skills to build non-interactive Python applications.",
-    "lessons": ["u06_lsn01", "u06_lsn02", "u06_lsn03", "u06_lsn04", "u06_lsn05", "u06_lsn06"]
+    "lessons": ["u06_lsn01", "u06_lsn02", "u06_lsn03", "u06_lsn04", "u06_lsn05", "u06_lsn06", "u06_lsn07"]
   }
 ]
