@@ -7,6 +7,10 @@ interface AuthContextType {
   currentUser: User | null;
   userLoggedIn: boolean;
   loading: boolean;
+  showLogin: boolean;
+  showSignup: boolean;
+  setShowLogin: (show: boolean) => void;
+  setShowSignup: (show: boolean) => void;
 }
 
 interface Props {
@@ -38,6 +42,8 @@ export function AuthProvider({ children }: Props) {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [userLoggedIn, setUserLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [showLogin, setShowLogin] = useState(false);
+  const [showSignup, setShowSignup] = useState(false);
 
   useEffect(
     () =>
@@ -58,6 +64,10 @@ export function AuthProvider({ children }: Props) {
     currentUser,
     userLoggedIn,
     loading,
+    showLogin,
+    showSignup,
+    setShowLogin,
+    setShowSignup,
   };
 
   return (

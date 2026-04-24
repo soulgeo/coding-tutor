@@ -1,25 +1,35 @@
 import { signOut } from "firebase/auth";
 import Card from "../ui/Card";
 import { auth } from "../../firebase";
+import { MouseEvent } from "react";
 import { useNavigate } from "react-router";
-import { FirebaseError } from "firebase/app";
+import toast from "react-hot-toast";
+import { getAuthErrorMessage } from "../../api/authErrors";
 
-const Logout = () => {
+interface LogoutProps {
+  closeModal?: () => void;
+}
+
+const Logout = ({ closeModal }: LogoutProps) => {
   const navigate = useNavigate();
 
-  const onSubmit = (e: React.MouseEvent) => {
+  const onSubmit = (e: MouseEvent) => {
     e.stopPropagation();
-    signOut(auth)
-      .then(() => {
-        navigate("/");
-      })
-      .catch((error: unknown) => {
-        if (error instanceof FirebaseError) {
-          console.log(error.code, error.message);
-        } else {
-          console.error("An unexpected error occurred", error);
-        }
-      });
+
+    const logoutPromise = signOut(auth);
+
+    toast.promise(logoutPromise, {
+      loading: "Signing out...",
+      success: "Successfully signed out!",
+      error: (err) => getAuthErrorMessage(err),
+    });
+
+    logoutPromise.then(() => {
+      if (closeModal) {
+        closeModal();
+      }
+      navigate("/");
+    });
   };
 
   return (

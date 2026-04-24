@@ -5,6 +5,7 @@ import ContinueLearningPage from "./components/pages/ContinueLearningPage";
 import { AuthProvider, getCurrentUser } from "./context/AuthContext";
 import LessonPage from "./components/pages/LessonPage";
 import { UnitProvider } from "./context/UnitContext";
+import ErrorPage from "./components/pages/ErrorPage";
 
 const requireAuthLoader = async () => {
   const user = await getCurrentUser();
@@ -26,23 +27,26 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <HomePage />,
-    errorElement: <div>404 Not Found</div>,
     loader: requireNoAuthLoader,
+    errorElement: <ErrorPage />,
   },
   {
     path: "/dashboard",
     element: <DashboardPage />,
     loader: requireAuthLoader,
+    errorElement: <ErrorPage />,
   },
   {
     path: "/continue",
     element: <ContinueLearningPage />,
     loader: requireAuthLoader,
+    errorElement: <ErrorPage />,
   },
   {
     path: "/units/:unitId/lessons/:id",
     element: <LessonPage />,
     loader: requireAuthLoader,
+    errorElement: <ErrorPage />,
   },
 ]);
 

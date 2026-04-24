@@ -1,17 +1,45 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAuth } from "../../../context/AuthContext";
 import profileImageUrl from "../../../assets/profile.svg";
 import Logout from "../../partials/Logout";
+import Login from "../../partials/Login";
+import Signup from "../../partials/Signup";
 import { Link } from "react-router";
 import 'animate.css';
 
 const UserDropdown = () => {
-  const { userLoggedIn } = useAuth();
+  const { userLoggedIn, showLogin, setShowLogin, showSignup, setShowSignup } =
+    useAuth();
 
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [isClosing, setIsClosing] = useState(false);
+  const [mode, setMode] = useState<"login" | "signup" | "logout">("login");
 
-  const openModal = () => {
+  // Keep modal in sync with context state
+  useEffect(() => {
+    if (showLogin) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setMode("login");
+      setIsClosing(false);
+    }
+  }, [showLogin]);
+
+  useEffect(() => {
+    if (showSignup) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setMode("signup");
+      setIsClosing(false);
+    }
+  }, [showSignup]);
+
+  useEffect(() => {
+    if ((showLogin || showSignup) && !isClosing) {
+      dialogRef.current?.showModal();
+    }
+  }, [showLogin, showSignup, isClosing]);
+
+  const openLogoutModal = () => {
+    setMode("logout");
     setIsClosing(false);
     dialogRef.current?.showModal();
   };
@@ -21,12 +49,26 @@ const UserDropdown = () => {
     setTimeout(() => {
       dialogRef.current?.close();
       setIsClosing(false);
+      setShowLogin(false);
+      setShowSignup(false);
     }, 200);
+  };
+
+  const switchToSignup = () => {
+    setMode("signup");
+    setShowLogin(false);
+    setShowSignup(true);
+  };
+
+  const switchToLogin = () => {
+    setMode("login");
+    setShowSignup(false);
+    setShowLogin(true);
   };
 
   return (
     <>
-      {userLoggedIn && (
+      {userLoggedIn ? (
         <div className="dropdown dropdown-end">
           <div
             tabIndex={0}
@@ -45,25 +87,44 @@ const UserDropdown = () => {
               <Link to="/dashboard">Dashboard</Link>
             </li>
             <li>
-              <span onClick={openModal} className="text-error">Sign Out</span>
+              <span onClick={openLogoutModal} className="text-error">
+                Sign Out
+              </span>
             </li>
-            <dialog
-              ref={dialogRef}
-              className="m-auto bg-transparent border-none w-sm p-3 overflow-visible"
-            >
-              <div className={isClosing ? "animate-subtle-zoom-fade-out" : "animate-subtle-zoom-fade"}>
-                <button
-                  onClick={closeModal}
-                  className="btn btn-ghost btn-circle absolute top-3 right-3 z-50"
-                >
-                  ✕
-                </button>
-                <Logout />
-              </div>
-            </dialog>
           </ul>
         </div>
+      ) : (
+        <button onClick={() => setShowLogin(true)} className="btn btn-ghost">
+          Log In
+        </button>
       )}
+
+      <dialog
+        ref={dialogRef}
+        className="m-auto bg-transparent border-none w-sm p-3 overflow-visible"
+      >
+        <div
+          className={
+            isClosing
+              ? "animate-subtle-zoom-fade-out"
+              : "animate-subtle-zoom-fade"
+          }
+        >
+          <button
+            onClick={closeModal}
+            className="btn btn-ghost btn-circle absolute top-3 right-3 z-50"
+          >
+            ✕
+          </button>
+          {mode === "logout" && <Logout closeModal={closeModal} />}
+          {mode === "login" && (
+            <Login closeModal={closeModal} onShowSignup={switchToSignup} />
+          )}
+          {mode === "signup" && (
+            <Signup closeModal={closeModal} onShowLogin={switchToLogin} />
+          )}
+        </div>
+      </dialog>
     </>
   );
 };

@@ -1,29 +1,38 @@
 import { signInWithEmailAndPassword } from "firebase/auth";
 import Card from "../ui/Card";
 import { auth } from "../../firebase";
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { useNavigate } from "react-router";
-import { FirebaseError } from "firebase/app";
+import toast from "react-hot-toast";
+import { getAuthErrorMessage } from "../../api/authErrors";
 
-const Login = () => {
+interface LoginProps {
+  closeModal?: () => void;
+  onShowSignup?: () => void;
+}
+
+const Login = ({ closeModal, onShowSignup }: LoginProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const onSubmit = (e: React.SubmitEvent) => {
+  const onSubmit = (e: FormEvent) => {
     e.preventDefault();
 
-    signInWithEmailAndPassword(auth, email, password)
-      .then(() => {
-        navigate("/dashboard");
-      })
-      .catch((error: unknown) => {
-        if (error instanceof FirebaseError) {
-          console.log(error.code, error.message);
-        } else {
-          console.error("An unexpected error occurred", error);
-        }
-      });
+    const loginPromise = signInWithEmailAndPassword(auth, email, password);
+
+    toast.promise(loginPromise, {
+      loading: "Logging in...",
+      success: "Successfully logged in!",
+      error: (err) => getAuthErrorMessage(err),
+    });
+
+    loginPromise.then(() => {
+      if (closeModal) {
+        closeModal();
+      }
+      navigate("/dashboard");
+    });
   };
 
   return (
@@ -48,6 +57,18 @@ const Login = () => {
           Log In
         </button>
       </form>
+      <div className="mt-4 text-center text-sm">
+        Don't have an account?{" "}
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            if (onShowSignup) onShowSignup();
+          }}
+          className="link link-primary"
+        >
+          Sign Up
+        </button>
+      </div>
     </Card>
   );
 };

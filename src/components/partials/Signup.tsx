@@ -1,52 +1,60 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import Card from "../ui/Card";
 import { auth, db } from "../../firebase";
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { useNavigate } from "react-router";
-import { FirebaseError } from "firebase/app";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
+import toast from "react-hot-toast";
+import { getAuthErrorMessage } from "../../api/authErrors";
 
-const Signup = () => {
+interface SignupProps {
+  closeModal?: () => void;
+  onShowLogin?: () => void;
+}
+
+const Signup = ({ closeModal, onShowLogin }: SignupProps) => {
   const [email, setEmail] = useState("");
   const [displayName, setDisplayName] = useState("");
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
   const navigate = useNavigate();
 
-  const onSubmit = (e: React.SubmitEvent) => {
+  const onSubmit = (e: FormEvent) => {
     e.preventDefault();
 
     if (password != password2) {
-      console.log("Passwords do not match")
-      return
+      toast.error("Passwords do not match");
+      return;
     }
 
-    createUserWithEmailAndPassword(auth, email, password)
-      .then(async (userCredential) => {
-        const user = userCredential.user;
-
-        try {
-          await setDoc(doc(db, "users", user.uid), {
-            email: email,
-            displayName: displayName,
-            createdAt: serverTimestamp(),
-            unitsProgress: {},
-            lessonsProgress: {}
-          })
-
-          navigate("/dashboard");
-
-        } catch (dbError) {
-          console.error("Error adding document", dbError)
-        }
-      })
-      .catch((error: unknown) => {
-        if (error instanceof FirebaseError) {
-          console.log(error.code, error.message);
-        } else {
-          console.error("An unexpected error occurred", error);
-        }
+    const signupPromise = (async () => {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+      await setDoc(doc(db, "users", user.uid), {
+        email: email,
+        displayName: displayName,
+        createdAt: serverTimestamp(),
+        unitsProgress: {},
+        lessonsProgress: {},
       });
+    })();
+
+    toast.promise(signupPromise, {
+      loading: "Creating account...",
+      success: "Account created successfully!",
+      error: (err) => getAuthErrorMessage(err),
+    });
+
+    signupPromise.then(() => {
+      if (closeModal) {
+        closeModal();
+      }
+      navigate("/units/unit01/lessons/u01_lsn01");
+    });
   };
 
   return (
@@ -85,6 +93,18 @@ const Signup = () => {
           Sign Up
         </button>
       </form>
+      <div className="mt-4 text-center text-sm">
+        Already have an account?{" "}
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            if (onShowLogin) onShowLogin();
+          }}
+          className="link link-primary"
+        >
+          Log In
+        </button>
+      </div>
     </Card>
   );
 };
