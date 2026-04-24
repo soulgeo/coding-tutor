@@ -14,6 +14,7 @@ import toast from "react-hot-toast";
 import LessonNavigation from "../ui/LessonNavigation";
 import ProgressBar from "../ui/ProgressBar";
 import type { UserData } from "../../data/userData";
+import { Play } from "lucide-react";
 
 const SUCCESS_MESSAGES = [
   "Correct!",
@@ -29,10 +30,11 @@ const LessonPage = () => {
   const { units, loading: unitsLoading } = useUnits();
   const [lessonData, setLessonData] = useState<Lesson | null>(null);
   const [code, setCode] = useState("");
-  const [stdout, setStdout] = useState("");
+  const [output, setOutput] = useState("");
   const [loading, setLoading] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
   const [completedLessons, setCompletedLessons] = useState<string[]>([]);
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -48,7 +50,7 @@ const LessonPage = () => {
           const data = docSnap.data() as Lesson;
           setLessonData(data);
           setCode(data.pretypedCode || DEFAULT_CODE);
-          setStdout(""); // Reset stdout for new lesson
+          setOutput(""); // Reset stdout for new lesson
         } else {
           console.error(`Lesson with id ${id} doesn't exist`);
         }
@@ -91,8 +93,14 @@ const LessonPage = () => {
   const runCode = async () => {
     setLoading(true);
     try {
-      const stdout = await executePythonCode(code);
-      setStdout(stdout);
+      const { stdout, stderr } = await executePythonCode(code);
+      if (stderr !== "") {
+        setIsError(true);
+        setOutput(stderr);
+      } else {
+        setIsError(false);
+        setOutput(stdout);
+      }
       setLoading(false);
     } catch (error) {
       console.error("Run Error:", error);
@@ -100,20 +108,33 @@ const LessonPage = () => {
   };
 
   const submitCode = async () => {
+    setLoading(true);
     try {
       const user = await getCurrentUser();
       if (user === null || !id || !unitId) return;
 
-      const stdout = await executePythonCode(code);
+      const { stdout, stderr } = await executePythonCode(code);
 
-      if (stdout.trim() === lessonData?.expectedOutput.trim()) {
+      if (stderr !== "") {
+        setIsError(true);
+        setOutput(stderr);
+        toast.error(`Incorrect, try again.`);
+        setLoading(false);
+        return;
+      } else {
+        setIsError(false);
+        setOutput(stdout);
+      }
+      setLoading(false);
+
+      if (stdout.trim() === String(lessonData?.expectedOutput ?? "").trim()) {
         const randomMessage =
           SUCCESS_MESSAGES[Math.floor(Math.random() * SUCCESS_MESSAGES.length)];
-        toast.success(randomMessage);
+        const message = lessonData?.successMessage || randomMessage;
+        toast.success(message);
         await updateDoc(doc(db, "users", user.uid), {
           [`unitsProgress.${unitId}.completedLessons`]: arrayUnion(id),
-        });
-        setCompletedLessons((prev) => Array.from(new Set([...prev, id])));
+        });        setCompletedLessons((prev) => Array.from(new Set([...prev, id])));
         setIsCompleted(true);
       } else {
         toast.error(`Incorrect, try again.`);
@@ -176,8 +197,10 @@ const LessonPage = () => {
                   Submit
                 </button>
               </div>
-              <div className="h-2/5 bg-base-200 p-4 rounded-lg font-mono overflow-auto whitespace-pre-wrap break-all min-h-40">
-                {loading ? <Loading size="sm" /> : stdout}
+              <div
+                className={`h-2/5 bg-base-200 p-4 rounded-lg font-mono overflow-auto whitespace-pre-wrap break-all min-h-40 ${isError ? "text-error" : ""}`}
+              >
+                {loading ? <Loading size="sm" /> : output}
               </div>
             </div>
           </div>

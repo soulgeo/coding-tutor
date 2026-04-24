@@ -16,5 +16,6 @@ export const executePythonCode = async (code: string) => {
   }
 
   const data = await response.json();
-  return data.run.stdout;
+  const out = { stdout: data.run.stdout, stderr: data.run.stderr }
+  return out;
 };
