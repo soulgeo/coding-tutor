@@ -10,7 +10,7 @@ const Navbar = () => {
       >
         <Navigation />
       </div>
-      <div id="right-navbar-items" className="flex flex-row justify-end">
+      <div id="right-navbar-items" className="flex flex-row justify-end mr-2">
         <UserDropdown />
       </div>
     </div>

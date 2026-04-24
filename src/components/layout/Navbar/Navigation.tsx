@@ -7,9 +7,12 @@ const Navigation = () => {
   return (
     <>
       {userLoggedIn && (
-        <div>
+        <div className="flex flex-row gap-2">
           <Link to="/dashboard" className="btn btn-ghost">
             Dashboard
+          </Link>
+          <Link to="/continue" className="btn btn-ghost">
+            Continue Learning
           </Link>
         </div>
       )}

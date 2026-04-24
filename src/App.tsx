@@ -1,6 +1,7 @@
 import { createBrowserRouter, redirect, RouterProvider } from "react-router";
 import HomePage from "./components/pages/HomePage";
 import DashboardPage from "./components/pages/DashboardPage";
+import ContinueLearningPage from "./components/pages/ContinueLearningPage";
 import { AuthProvider, getCurrentUser } from "./context/AuthContext";
 import LessonPage from "./components/pages/LessonPage";
 import { UnitProvider } from "./context/UnitContext";
@@ -31,6 +32,11 @@ const router = createBrowserRouter([
   {
     path: "/dashboard",
     element: <DashboardPage />,
+    loader: requireAuthLoader,
+  },
+  {
+    path: "/continue",
+    element: <ContinueLearningPage />,
     loader: requireAuthLoader,
   },
   {
