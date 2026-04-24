@@ -16,6 +16,7 @@ import ProgressBar from "../ui/ProgressBar";
 import type { UserData } from "../../data/userData";
 import { Play, HelpCircle } from "lucide-react";
 import HintModal, { type HintModalHandle } from "../ui/HintModal";
+import 'animate.css';
 
 const SUCCESS_MESSAGES = [
   "Correct!",
@@ -216,7 +217,7 @@ const LessonPage = () => {
                 {failedAttempts >= 2 && lessonData.hint && (
                   <button
                     onClick={openHintModal}
-                    className="btn btn-secondary rounded-full"
+                    className="btn btn-secondary rounded-full animate__animated animate__fadeIn animate__faster"
                   >
                     <HelpCircle size={16} />
                     Hint

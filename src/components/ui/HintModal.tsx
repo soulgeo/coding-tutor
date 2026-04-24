@@ -1,5 +1,7 @@
-import { useRef, useImperativeHandle, forwardRef } from "react";
+import { useRef, useImperativeHandle, forwardRef, useState } from "react";
 import Card from "./Card";
+import MarkdownRenderer from "./MarkdownRenderer";
+import 'animate.css';
 
 interface HintModalProps {
   hint: string;
@@ -12,33 +14,42 @@ export interface HintModalHandle {
 
 const HintModal = forwardRef<HintModalHandle, HintModalProps>(({ hint }, ref) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const [isClosing, setIsClosing] = useState(false);
+
+  const handleClose = () => {
+    setIsClosing(true);
+    setTimeout(() => {
+      dialogRef.current?.close();
+      setIsClosing(false);
+    }, 200);
+  };
 
   useImperativeHandle(ref, () => ({
-    showModal: () => dialogRef.current?.showModal(),
-    close: () => dialogRef.current?.close(),
+    showModal: () => {
+      setIsClosing(false);
+      dialogRef.current?.showModal();
+    },
+    close: handleClose,
   }));
-
-  const closeModal = () => dialogRef.current?.close();
 
   return (
     <dialog
       ref={dialogRef}
-      className="m-auto bg-transparent border-none w-sm p-3"
+      className="m-auto bg-transparent border-none w-full max-w-lg p-3 overflow-visible"
     >
-      <button
-        onClick={closeModal}
-        className="btn btn-ghost btn-circle absolute top-6 right-6"
-      >
-        ✕
-      </button>
-      <Card title="Hint">
-        <p className="py-4 text-base-content">{hint}</p>
-        <div className="flex justify-end">
-          <button onClick={closeModal} className="btn">
-            Close
-          </button>
-        </div>
-      </Card>
+      <div className={isClosing ? "animate-subtle-zoom-fade-out" : "animate-subtle-zoom-fade"}>
+        <button
+          onClick={handleClose}
+          className="btn btn-ghost btn-circle absolute top-3 right-3 z-50"
+        >
+          ✕
+        </button>
+        <Card title="Hint">
+          <div className="py-4">
+            <MarkdownRenderer content={hint} />
+          </div>
+        </Card>
+      </div>
     </dialog>
   );
 });

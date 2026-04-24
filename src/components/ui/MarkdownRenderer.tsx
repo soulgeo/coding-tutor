@@ -1,13 +1,51 @@
 import ReactMarkdown, { type Components } from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { vscDarkPlus, vs } from "react-syntax-highlighter/dist/esm/styles/prism";
 import type { CSSProperties } from "react";
+import { useEffect, useState } from "react";
 
 interface Props {
   content: string;
 }
 
 const MarkdownRenderer = ({ content }: Props) => {
+  const [isDark, setIsDark] = useState(true);
+
+  useEffect(() => {
+    const checkTheme = () => {
+      const theme = document.documentElement.getAttribute("data-theme");
+      if (theme) {
+        setIsDark(theme === "dark");
+      } else {
+        setIsDark(window.matchMedia("(prefers-color-scheme: dark)").matches);
+      }
+    };
+
+    checkTheme();
+
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === "data-theme") {
+          checkTheme();
+        }
+      });
+    });
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme"],
+    });
+
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    const handleChange = () => checkTheme();
+    mediaQuery.addEventListener("change", handleChange);
+
+    return () => {
+      observer.disconnect();
+      mediaQuery.removeEventListener("change", handleChange);
+    };
+  }, []);
+
   const components: Components = {
     code(props) {
       const { children, className } = props;
@@ -16,7 +54,7 @@ const MarkdownRenderer = ({ content }: Props) => {
       return match ? (
         <div className="rounded-lg overflow-hidden border border-base-300 bg-base-200">
           <SyntaxHighlighter
-            style={vscDarkPlus as { [key: string]: CSSProperties }}
+            style={(isDark ? vscDarkPlus : vs) as { [key: string]: CSSProperties }}
             language={match[1]}
             PreTag="div"
             customStyle={{
@@ -27,12 +65,15 @@ const MarkdownRenderer = ({ content }: Props) => {
               width: "100%",
               fontSize: "0.9rem",
               lineHeight: "1.6",
+              padding: "1rem",
+              fontFamily: "var(--font-mono)",
             }}
             codeTagProps={{
               style: {
                 background: "transparent",
                 border: "none",
                 padding: 0,
+                fontFamily: "inherit",
               },
             }}
           >
@@ -46,7 +87,7 @@ const MarkdownRenderer = ({ content }: Props) => {
   };
 
   return (
-    <div className="prose prose-invert max-w-none">
+    <div className={`prose max-w-none ${isDark ? "prose-invert" : ""}`}>
       <ReactMarkdown components={components}>{content}</ReactMarkdown>
     </div>
   );

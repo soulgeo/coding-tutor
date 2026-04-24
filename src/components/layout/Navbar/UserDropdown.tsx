@@ -1,15 +1,29 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useAuth } from "../../../context/AuthContext";
 import profileImageUrl from "../../../assets/profile.svg";
 import Logout from "../../partials/Logout";
 import { Link } from "react-router";
+import 'animate.css';
 
 const UserDropdown = () => {
   const { userLoggedIn } = useAuth();
 
   const dialogRef = useRef<HTMLDialogElement>(null);
-  const openModal = () => dialogRef.current?.showModal();
-  const closeModal = () => dialogRef.current?.close();
+  const [isClosing, setIsClosing] = useState(false);
+
+  const openModal = () => {
+    setIsClosing(false);
+    dialogRef.current?.showModal();
+  };
+
+  const closeModal = () => {
+    setIsClosing(true);
+    setTimeout(() => {
+      dialogRef.current?.close();
+      setIsClosing(false);
+    }, 200);
+  };
+
   return (
     <>
       {userLoggedIn && (
@@ -35,15 +49,17 @@ const UserDropdown = () => {
             </li>
             <dialog
               ref={dialogRef}
-              className="m-auto bg-transparent border-none w-sm p-3"
+              className="m-auto bg-transparent border-none w-sm p-3 overflow-visible"
             >
-              <button
-                onClick={closeModal}
-                className="btn btn-ghost btn-circle absolute top-6 right-6"
-              >
-                ✕
-              </button>
-              <Logout />
+              <div className={isClosing ? "animate-subtle-zoom-fade-out" : "animate-subtle-zoom-fade"}>
+                <button
+                  onClick={closeModal}
+                  className="btn btn-ghost btn-circle absolute top-3 right-3 z-50"
+                >
+                  ✕
+                </button>
+                <Logout />
+              </div>
             </dialog>
           </ul>
         </div>
