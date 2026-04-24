@@ -12,7 +12,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ completed, total, className =
   return (
     <div className={`border border-accent h-4 min-h-4 rounded-lg overflow-hidden ${className}`}>
       <div
-        className="bg-base-content h-full rounded-lg"
+        className="bg-base-content h-full rounded-lg transition-[width] duration-500 ease-in-out"
         style={
           {
             width: `${100 * completionRatio}%`,

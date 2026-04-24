@@ -10,10 +10,11 @@ interface Props {
 
 const UnitBox = ({ unitData, index }: Props) => {
   const totalLessons = unitData.lessons;
-  const completed = unitData.completedLessons;
+  const completedLessons = unitData.completedLessons;
+  const completed = totalLessons.length == completedLessons.length;
 
   const nextLessonId =
-    totalLessons.find((id) => !completed.includes(id)) || totalLessons[0];
+    totalLessons.find((id) => !completedLessons.includes(id)) || totalLessons[0];
 
   return (
     <Link
@@ -25,13 +26,13 @@ const UnitBox = ({ unitData, index }: Props) => {
           <h3 className="text-lg font-bold">
             {index}. {unitData.name}
           </h3>
-          <p>
-            {completed.length} / {totalLessons.length}
+          <p className={completed ? "text-success" : ""}>
+            {completedLessons.length} / {totalLessons.length}
           </p>
         </div>
         <p className="text-sm">{unitData.description}</p>
         <ProgressBar
-          completed={completed.length}
+          completed={completedLessons.length}
           total={totalLessons.length}
           className="mt-4"
         />

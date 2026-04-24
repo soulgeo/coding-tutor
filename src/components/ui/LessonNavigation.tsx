@@ -5,6 +5,8 @@ import { useMemo, useState, useEffect } from "react";
 import { useUnits } from "../../context/UnitContext";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../firebase";
+import NavDropdown from "./NavDropdown";
+import 'animate.css';
 
 interface Props {
   unitId?: string;
@@ -76,73 +78,52 @@ const LessonNavigation = ({ unitId, lessonId, currentLesson, isCompleted }: Prop
 
   const { prevLink, nextLink } = navigation;
 
+  const unitDropdownItems = sortedUnitIds.map((uId, index) => ({
+    to: `/units/${uId}/lessons/${units![uId].lessons[0]}`,
+    label: `U${index + 1}: ${units![uId].name}`,
+    isActive: uId === unitId,
+  }));
+
+  const lessonDropdownItems = lessonsInUnit.map((l, index) => ({
+    to: `/units/${unitId}/lessons/${l.id}`,
+    label: `L${index + 1}: ${l.title}`,
+    isActive: l.id === lessonId,
+  }));
+
   return (
     <div className="flex flex-row justify-end items-center gap-2">
-      <div className="dropdown dropdown-end">
-        <div
-          tabIndex={0}
-          role="button"
-          className="btn btn-ghost btn-sm md:btn-md normal-case"
-        >
-          U{currentUnitNumber}:{" "}
-          {units?.[unitId || ""]?.name || "Loading..."}
-        </div>
-        <ul
-          tabIndex={0}
-          className="dropdown-content menu bg-base-100 rounded-box z-50 w-72 p-2 shadow mt-2"
-        >
-          {sortedUnitIds.map((uId, index) => (
-            <li key={uId}>
-              <Link
-                to={`/units/${uId}/lessons/${units![uId].lessons[0]}`}
-                className={uId === unitId ? "active" : ""}
-              >
-                U{index + 1}: {units![uId].name}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </div>
+      <NavDropdown
+        dropdownClassName="ml-4"
+        buttonLabel={
+          <>
+            U{currentUnitNumber}: {units?.[unitId || ""]?.name || "Loading..."}
+          </>
+        }
+        items={unitDropdownItems}
+      />
 
-      <div className="hidden md:inline-block dropdown dropdown-end">
-        <div
-          tabIndex={0}
-          role="button"
-          className="btn btn-ghost btn-sm md:btn-md normal-case"
-        >
-          <span className="hidden md:inline">
-            L{currentLessonNumber}:
-          </span>{" "}
-          {currentLesson.title}
-        </div>
-        <ul
-          tabIndex={0}
-          className="dropdown-content menu bg-base-100 rounded-box z-50 w-72 p-2 shadow mt-2 max-h-96 overflow-y-auto"
-        >
-          {lessonsInUnit.map((l, index) => (
-            <li key={l.id}>
-              <Link
-                to={`/units/${unitId}/lessons/${l.id}`}
-                className={l.id === lessonId ? "active" : ""}
-              >
-                L{index + 1}: {l.title}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </div>
+      <NavDropdown
+        dropdownClassName="hidden xl:inline-block"
+        buttonLabel={
+          <>
+            <span className="hidden md:inline">L{currentLessonNumber}:</span>{" "}
+            {currentLesson.title}
+          </>
+        }
+        items={lessonDropdownItems}
+      />
 
-      <div className="flex flex-row gap-2 ml-2">
+      <div className="flex flex-row gap-3 ml-2">
         {prevLink ? (
           <Link
             to={prevLink}
-            className="btn btn-primary btn-circle btn-sm md:btn-md"
+            className="btn btn-primary btn-circle btn-sm md:btn-md w-15"
           >
             <ChevronLeft size={20} />
           </Link>
         ) : (
           <button
-            className="btn btn-primary btn-circle btn-sm md:btn-md btn-disabled"
+            className="btn btn-primary btn-circle btn-sm md:btn-md btn-disabled w-15"
             disabled
           >
             <ChevronLeft size={20} />
@@ -151,13 +132,13 @@ const LessonNavigation = ({ unitId, lessonId, currentLesson, isCompleted }: Prop
         {nextLink ? (
           <Link
             to={nextLink}
-            className={`btn ${isCompleted ? "btn-accent" : "btn-primary"} btn-circle btn-sm md:btn-md`}
+            className={`btn ${isCompleted ? "btn-accent animate__animated animate__headShake" : "btn-primary"} btn-circle btn-sm md:btn-md w-15`}
           >
             <ChevronRight size={20} />
           </Link>
         ) : (
           <button
-            className="btn btn-primary btn-circle btn-sm md:btn-md btn-disabled"
+            className="btn btn-primary btn-circle btn-sm md:btn-md btn-disabled w-15"
             disabled
           >
             <ChevronRight size={20} />

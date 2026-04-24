@@ -9,4 +9,5 @@ export interface Lesson {
   content: string;
   expectedOutput: string;
   pretypedCode: string;
+  successMessage?: string;
 }

@@ -77,7 +77,8 @@ async function sync() {
     await setDoc(doc(db, "lessons", id), {
       title: metadata.title || id,
       pretypedCode: metadata.pretypedCode || "",
-      expectedOutput: metadata.expectedOutput || "",
+      expectedOutput: String(metadata.expectedOutput ?? ""),
+      successMessage: metadata.successMessage || "",
       content: content
     }, { merge: true });
 

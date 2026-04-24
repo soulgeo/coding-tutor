@@ -154,8 +154,8 @@ const LessonPage = () => {
         <>
           <div className="flex flex-row justify-between items-center w-full px-6">
             <div className="flex flex-row items-center gap-4 w-1/4 md:w-1/3">
-              <span className="text-sm font-bold hidden sm:inline whitespace-nowrap">
-                Unit {currentUnitNumber} Progress:
+              <span className="text-sm font-bold hidden md:inline whitespace-nowrap">
+                Unit {currentUnitNumber}:
               </span>
               <ProgressBar
                 completed={completedLessons.length}
@@ -188,12 +188,14 @@ const LessonPage = () => {
                   onClick={runCode}
                   className="btn btn-primary rounded-full"
                 >
+                  <Play size={16} />
                   Run
                 </button>
                 <button
                   onClick={submitCode}
                   className={`btn ${isCompleted ? "btn-primary" : "btn-accent"} rounded-full`}
                 >
+                  <Play size={16} />
                   Submit
                 </button>
               </div>

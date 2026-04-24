@@ -1,5 +1,6 @@
-import { Toaster } from "react-hot-toast";
+import { Toaster, resolveValue } from "react-hot-toast";
 import Navbar from "./Navbar/Navbar";
+import CustomToast from "../ui/CustomToast";
 
 interface Props {
   children: React.ReactNode;
@@ -10,32 +11,23 @@ const Layout = ({ children, fullWidth }: Props) => {
   return (
     <>
       <Toaster
-        toastOptions={{
-          style: {
-            backgroundColor: "var(--color-base-200)",
-            color: "var(--color-base-content)",
-            border: "1px solid var(--color-base-300)",
-          },
-          success: {
-            iconTheme: {
-              primary: "var(--color-success)",
-              secondary: "var(--color-success-content)",
-            },
-            style: {
-              border: "1px solid var(--color-success)",
-            },
-          },
-          error: {
-            iconTheme: {
-              primary: "var(--color-error)",
-              secondary: "var(--color-error-content)",
-            },
-            style: {
-              border: "1px solid var(--color-error)",
-            },
-          },
+        position="bottom-right"
+        containerStyle={{
+          bottom: "40px",
+          right: "20px",
         }}
-      />
+        toastOptions={{
+          duration: 4000,
+        }}
+      >
+        {(t) => (
+          <CustomToast 
+            t={t} 
+            message={resolveValue(t.message, t)} 
+            icon={t.icon} 
+          />
+        )}
+      </Toaster>
       <Navbar />
       <div
         className={`flex flex-col items-center w-full overscroll-none bg-base-300 h-full min-h-screen pt-20`}
