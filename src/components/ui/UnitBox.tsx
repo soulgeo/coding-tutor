@@ -21,7 +21,7 @@ const UnitBox = ({ unitData, index }: Props) => {
       to={`/units/${unitData.uid}/lessons/${nextLessonId}/`}
       className="block"
     >
-      <div className="flex flex-col gap-2 p-4 bg-base-100 rounded shadow min-h-40">
+      <div className="flex flex-col gap-2 p-4 bg-base-100 rounded shadow min-h-35">
         <div className="flex flex-row justify-between">
           <h3 className="text-lg font-bold">
             {index}. {unitData.name}

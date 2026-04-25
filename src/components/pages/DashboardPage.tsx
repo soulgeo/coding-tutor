@@ -7,6 +7,7 @@ import { db } from "../../firebase";
 import type { UserData } from "../../data/userData";
 import { useUnits } from "../../context/UnitContext";
 import Loading from "../ui/Loading";
+import Statistics from "../ui/Statistics";
 
 const DashboardPage = () => {
   const [userData, setUserData] = useState<UserData | null>(null);
@@ -40,7 +41,7 @@ const DashboardPage = () => {
 
   return (
     <Layout>
-      {(userData && units && !unitsLoading) ? (
+      {userData && units && !unitsLoading ? (
         <>
           <div className="text-center font-bold text-4xl mt-10 mb-5">
             {userData.displayName}'s Dashboard
@@ -48,12 +49,13 @@ const DashboardPage = () => {
           <div className="text-center text-lg mb-10">
             Continue where you left off...
           </div>
-          <div className="w-full mb-40">
+          <div className="w-full mb-10">
             <UnitsGrid
               units={units}
               unitsProgress={userData.unitsProgress}
             ></UnitsGrid>
           </div>
+          <Statistics userData={userData} units={units} />
         </>
       ) : (
         <Loading />
