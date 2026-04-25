@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import toast from "react-hot-toast";
 import { getAuthErrorMessage } from "../../api/authErrors";
+import { Eye, EyeOff } from "lucide-react";
 
 interface LoginProps {
   closeModal?: () => void;
@@ -14,9 +15,10 @@ interface LoginProps {
 const Login = ({ closeModal, onShowSignup }: LoginProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
-  const onSubmit = (e: React.SubmitEvent) => {
+  const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     const loginPromise = signInWithEmailAndPassword(auth, email, password);
@@ -46,13 +48,22 @@ const Login = ({ closeModal, onShowSignup }: LoginProps) => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         ></input>
-        <input
-          type="password"
-          className="input input-ghost w-full"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        ></input>
+        <div className="relative w-full">
+          <input
+            type={showPassword ? "text" : "password"}
+            className="input input-ghost w-full pr-10"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          ></input>
+          <button
+            type="button"
+            className="absolute inset-y-0 right-0 flex items-center pr-3 text-base-content/50 hover:text-base-content"
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+          </button>
+        </div>
         <button type="submit" className="btn btn-primary mt-2">
           Log In
         </button>

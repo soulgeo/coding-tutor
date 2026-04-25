@@ -6,6 +6,7 @@ import { useNavigate } from "react-router";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import toast from "react-hot-toast";
 import { getAuthErrorMessage } from "../../api/authErrors";
+import { Eye, EyeOff } from "lucide-react";
 
 interface SignupProps {
   closeModal?: () => void;
@@ -17,9 +18,11 @@ const Signup = ({ closeModal, onShowLogin }: SignupProps) => {
   const [displayName, setDisplayName] = useState("");
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate();
 
-  const onSubmit = (e: React.SubmitEvent) => {
+  const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (password != password2) {
@@ -75,20 +78,38 @@ const Signup = ({ closeModal, onShowLogin }: SignupProps) => {
           value={displayName}
           onChange={(e) => setDisplayName(e.target.value)}
         ></input>
-        <input
-          type="password"
-          className="input input-ghost w-full"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        ></input>
-        <input
-          type="password"
-          className="input input-ghost w-full"
-          placeholder="Confirm Password"
-          value={password2}
-          onChange={(e) => setPassword2(e.target.value)}
-        ></input>
+        <div className="relative w-full">
+          <input
+            type={showPassword ? "text" : "password"}
+            className="input input-ghost w-full pr-10"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          ></input>
+          <button
+            type="button"
+            className="absolute inset-y-0 right-0 flex items-center pr-3 text-base-content/50 hover:text-base-content"
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+          </button>
+        </div>
+        <div className="relative w-full">
+          <input
+            type={showConfirmPassword ? "text" : "password"}
+            className="input input-ghost w-full pr-10"
+            placeholder="Confirm Password"
+            value={password2}
+            onChange={(e) => setPassword2(e.target.value)}
+          ></input>
+          <button
+            type="button"
+            className="absolute inset-y-0 right-0 flex items-center pr-3 text-base-content/50 hover:text-base-content"
+            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+          >
+            {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+          </button>
+        </div>
         <button type="submit" className="btn btn-primary mt-2">
           Sign Up
         </button>
