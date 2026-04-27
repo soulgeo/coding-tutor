@@ -11,16 +11,24 @@
 \contentsline {subsection}{\numberline {2.2.2}Data Fetching and Rendering}{6}{subsection.2.2.2}%
 \contentsline {section}{\numberline {2.3}Sandboxed Execution Engine}{6}{section.2.3}%
 \contentsline {subsection}{\numberline {2.3.1}Container Isolation}{6}{subsection.2.3.1}%
-\contentsline {section}{\numberline {2.4}Assessment Logic and Telemetry}{7}{section.2.4}%
-\contentsline {subsection}{\numberline {2.4.1}Trial vs. Validation Workflows}{7}{subsection.2.4.1}%
+\contentsline {section}{\numberline {2.4}Assessment Logic and Telemetry}{6}{section.2.4}%
+\contentsline {subsection}{\numberline {2.4.1}Trial vs. Validation Workflows}{6}{subsection.2.4.1}%
 \contentsline {subsection}{\numberline {2.4.2}Data Persistence and Progress Tracking}{7}{subsection.2.4.2}%
-\contentsline {section}{\numberline {2.5}Database Schema and Progress Tracking}{7}{section.2.5}%
+\contentsline {section}{\numberline {2.5}Database Schema}{7}{section.2.5}%
 \contentsline {subsection}{\numberline {2.5.1}User Data Model}{7}{subsection.2.5.1}%
-\contentsline {section}{\numberline {2.6}Security and Authentication}{8}{section.2.6}%
-\contentsline {chapter}{\numberline {3}User Interface and Experience Design}{9}{chapter.3}%
-\contentsline {section}{\numberline {3.1}Design Philosophy and Frameworks}{9}{section.3.1}%
-\contentsline {section}{\numberline {3.2}Semantic Layering and Visual Hierarchy}{9}{section.3.2}%
-\contentsline {section}{\numberline {3.3}Typography System for Code Legibility}{10}{section.3.3}%
-\contentsline {subsection}{\numberline {3.3.1}Sizing and Spacing}{10}{subsection.3.3.1}%
-\contentsline {subsection}{\numberline {3.3.2}UX Optimization for Novice Learners (Ligature Prevention)}{11}{subsection.3.3.2}%
-\contentsline {chapter}{\numberline {4}Self-Assessment}{12}{chapter.4}%
+\contentsline {section}{\numberline {2.6}Security and Authentication}{7}{section.2.6}%
+\contentsline {chapter}{\numberline {3}User Interface and Experience Design}{8}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Design Philosophy}{8}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Dashboard and Information Architecture}{8}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Visualizing Progression}{8}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.2.2}Performance Metrics}{9}{subsection.3.2.2}%
+\contentsline {section}{\numberline {3.3}The Dual-Pane Learning Environment}{9}{section.3.3}%
+\contentsline {section}{\numberline {3.4}The Interactive Workspace}{10}{section.3.4}%
+\contentsline {subsection}{\numberline {3.4.1}Editor and Console Distinction}{11}{subsection.3.4.1}%
+\contentsline {subsection}{\numberline {3.4.2}Action Buttons and Visual Weight}{11}{subsection.3.4.2}%
+\contentsline {subsection}{\numberline {3.4.3}Post-Success Interface Updates}{11}{subsection.3.4.3}%
+\contentsline {section}{\numberline {3.5}Typography for Code Legibility}{11}{section.3.5}%
+\contentsline {section}{\numberline {3.6}Non-Intrusive Feedback Mechanisms}{12}{section.3.6}%
+\contentsline {subsection}{\numberline {3.6.1}Pedagogical and Success Feedback}{12}{subsection.3.6.1}%
+\contentsline {subsection}{\numberline {3.6.2}Authentication Error Handling}{12}{subsection.3.6.2}%
+\contentsline {chapter}{\numberline {4}Self-Assessment}{13}{chapter.4}%
