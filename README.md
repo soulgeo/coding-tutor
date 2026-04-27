@@ -1,73 +1,76 @@
-# React + TypeScript + Vite
+# Coding Tutor
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An interactive Python learning platform designed for absolute beginners.
 
-Currently, two official plugins are available:
+## Overview
+Coding Tutor is a web-based educational application that provides a structured introduction to Python programming. It combines theoretical instruction with a sandboxed coding environment, allowing students to practice and validate their skills in real-time.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Demo
+<video src="video-demo.mp4" controls width="100%"></video>
 
-## React Compiler
+## Key Features
+- **Structured Curriculum:** 6 progressive units covering Python foundations, logic, loops, collections, and functions.
+- **Interactive Missions:** Real-time code execution and validation using a sandboxed environment.
+- **Adaptive Hint System:** Intelligent feedback that provides hints after multiple failed attempts.
+- **Personalized Dashboard:** Track progress, completed lessons, and performance metrics with circular progress indicators.
+- **Modern UI:** Clean, dual-pane learning environment designed for focus and readability, with custom syntax highlighting and responsive design.
+- **Secure Execution:** Uses a dockerized Piston engine to run user code safely in an isolated environment.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Technical Stack
+- **Frontend:** React (TypeScript), Tailwind CSS, DaisyUI, Lucide icons.
+- **Execution Layer:** Dockerized Piston engine for secure code execution.
+- **Persistence Layer:** Google Firebase (Authentication & Firestore).
+- **Content:** Lessons authored in Markdown with YAML headers, synchronized via a custom Node.js pipeline.
 
-## Expanding the ESLint configuration
+## Setup & Installation
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Prerequisites
+- Node.js (v18+)
+- Docker & Docker Compose
+- Firebase Project (credentials required in `.env`)
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Local Development
+1. **Clone the repository:**
+   ```bash
+   git clone <repository-url>
+   cd coding-tutor
+   ```
+2. **Configure Environment Variables:**
+   Create a `.env` file in the root directory with your Firebase configuration:
+   ```env
+   VITE_FIREBASE_API_KEY=your_api_key
+   VITE_FIREBASE_AUTH_DOMAIN=your_auth_domain
+   VITE_FIREBASE_PROJECT_ID=your_project_id
+   VITE_FIREBASE_STORAGE_BUCKET=your_storage_bucket
+   VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+   VITE_FIREBASE_APP_ID=your_app_id
+   ```
+3. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+4. **Start the Infrastructure (Piston & App):**
+   ```bash
+   docker-compose up -d
+   ```
+   *Note: This will start Piston and automatically install the Python 3.12 runtime.*
+5. **Synchronize Lessons to Firebase:**
+   ```bash
+   node sync_lessons.js
+   ```
+6. **Access the application:**
+   The application will be available at [http://localhost:8000](http://localhost:8000).
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Curriculum Structure
+1. **Unit 1: Python Foundations** – Variables and printing.
+2. **Unit 2: Decision Making** – Logical operators and conditionals.
+3. **Unit 3: Loops & Automation** – For/While loops and range().
+4. **Unit 4: Data Collections** – Working with lists.
+5. **Unit 5: Reusable Tools** – Functions and modularity.
+6. **Unit 6: Building Projects** – Final practical exercises.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## Documentation
+Detailed technical documentation and pedagogical design choices are available in the `docs/main.pdf` file.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+---
+*Developed by Georgios Soulantikas - April 2026*
