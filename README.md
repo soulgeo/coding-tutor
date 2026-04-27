@@ -33,7 +33,7 @@ https://github.com/user-attachments/assets/d68c3b42-b557-4c4a-8554-3dce0c548437
 ### Local Development
 1. **Clone the repository:**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/soulgeo/coding-tutor.git
    cd coding-tutor
    ```
 2. **Configure Environment Variables:**
