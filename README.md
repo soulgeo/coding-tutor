@@ -1,9 +1,13 @@
+
 # Coding Tutor
 
 An interactive Python learning platform designed for absolute beginners.
 
 ## Overview
 Coding Tutor is a web-based educational application that provides a structured introduction to Python programming. It combines theoretical instruction with a sandboxed coding environment, allowing students to practice and validate their skills in real-time.
+
+## Demo
+https://github.com/user-attachments/assets/d8b5214d-47e9-4b4f-b28f-c1c3faff0f28
 
 ## Key Features
 - **Structured Curriculum:** 6 progressive units covering Python foundations, logic, loops, collections, and functions.
