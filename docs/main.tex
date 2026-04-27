@@ -211,8 +211,44 @@ During the lessons, these toasts provide instant feedback. When a user submits a
 \subsection{Authentication Error Handling}
 The same elegant feedback system is applied to the login and registration flows. Instead of exposing raw database errors (such as \texttt{auth/invalid-credential}), the application intercepts these codes and translates them into friendly, human-readable toast notifications (e.g., "The email or password you entered is incorrect"). This ensures that even at the very first touchpoint of the application, the user feels guided and supported.
 
-\chapter{Self-Assessment}
-Lorem ipsum...
+\chapter{Evaluation against Project Requirements}
+\label{ch:evaluation}
+
+\section{Project Conclusion}
+The development of the "Coding Tutor" application represents an effort to synthesize modern web engineering practices with established pedagogical theories. By moving away from passive instructional methods and implementing an active, sandboxed environment, the platform provides a safe and interactive space for novices to take their first steps in Python programming. 
+
+The decoupled architecture—separating the React frontend, the Firebase data layer, and the Dockerized Piston execution engine—was chosen to ensure that the application is functional, secure, and easily extensible for future curriculum updates.
+
+\section{Alignment with Grading Criteria}
+To ensure the project aligns with the academic requirements of the course, the following section maps the platform's implemented features directly to the core evaluation rubric.
+
+\subsection{Pedagogical Appropriateness and Educational Quality}
+The curriculum is heavily scaffolded, designed specifically for absolute beginners. Moving from basic variable assignment (Unit 1) to functional programming (Unit 5), the system encourages a "growth mindset." This is technically enforced by separating the "Run" (safe experimentation) and "Submit" (formal assessment) workflows, allowing students to make mistakes without penalty.
+
+\subsection{Structure and Rich Activities}
+To meet the requirement for active learning, the application avoids the common "Next Button" tutorial anti-pattern. Every lesson requires the student to actively read, write, or fix Python code. The dynamic validation against hidden \texttt{expectedOutput} strings ensures that the activities require genuine problem-solving rather than passive reading.
+
+\subsection{Personalization and Adaptive Learning}
+Personalization is achieved through the state-driven adaptive hint mechanism. By actively tracking user failure rates in real-time, the platform waits until a student has struggled (failing multiple times) before offering a targeted hint. This provides individualized intervention exactly when needed, preventing frustration while preserving the intellectual challenge.
+
+\subsection{Database Utilization and Rich Statistics}
+The project leverages a NoSQL schema in Google Firebase to go beyond basic user authentication. The database captures detailed telemetry, including completed lesson arrays and specific lesson attempt counters. This data directly powers the Dashboard, transforming raw database metrics into visual progress rings and attempt-rate statistics for the user.
+
+\subsection{Technical Completeness and Flawless Operation}
+Handling untrusted user input is a significant technical challenge. The integration of the Piston code execution engine via Docker provides a professional, sandboxed solution to this problem. Furthermore, the creation of the \texttt{sync\_lessons.js} deployment pipeline demonstrates a clear separation of concerns, decoupling content management from the application's core logic.
+
+\subsection{User Interface, Aesthetics, and Usability}
+Utilizing Tailwind CSS and DaisyUI, the platform features a responsive design tailored for the target demographic. Crucial UX decisions were made to reduce cognitive load, such as the split-screen layout for desktop displays, the tabbed layout for mobile devices, and the programmatic disabling of font ligatures to aid beginners in syntax recognition.
+
+\subsection{Creativity and Gamification}
+The platform attempts to elevate the standard learning experience through subtle gamification elements. The context-aware, Python-themed success messages (e.g., \texttt{if answer == wrong: try\_again()}), the smooth toast notification system, and the visual progress tracking create an environment that feels rewarding and encourages continued practice.
+
+\section{Limitations and Future Extensions}
+While the application successfully meets the core requirements, there is always room for improvement in software engineering. Future iterations of the platform could include:
+\begin{itemize}
+    \item \textbf{Unit Testing Integration:} Upgrading the automated grading system from simple \texttt{stdout} string matching to executing hidden unit test files (e.g., via \texttt{unittest} or \texttt{pytest}). This would allow the platform to evaluate edge cases, function return values, and variable states, making the assessment significantly more robust.
+    \item \textbf{Teacher Dashboard:} Expanding the Firebase schema to include a "Teacher" role, allowing educators to view aggregate class statistics and identify curriculum bottlenecks.
+\end{itemize}
 
 
 \end{document}
