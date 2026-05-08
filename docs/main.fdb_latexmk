@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1777313922.42267 "main.tex" "main.pdf" "main" 1777313923.12151 0
+["pdflatex"] 1778233518.19191 "main.tex" "main.pdf" "main" 1778233518.88985 0
   "/home/twel/.texlive/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1200.600pk" 1777304448.89051 14040 44ec56da5d01b89e6bf71f0fa6134af1 ""
   "/home/twel/.texlive/texmf-var/web2c/pdftex/pdflatex.fmt" 1777301387 2318474 ddf96eacb51b63d27f3769532e21f6ac ""
   "/home/twel/texmf/tex/generic/bigintcalc/bigintcalc.sty" 1576625341 40635 c40361e206be584d448876bba8a64a3b ""
@@ -78,10 +78,10 @@
   "/usr/share/texmf-dist/tex/latex/graphics-def/pdftex.def" 1775415801 19626 23e2822b9b2b5005f4c549ca98b9334d ""
   "/usr/share/texmf-dist/web2c/texmf.cnf" 1775415801 43569 fd570f2fa160877d211e859f687312ba ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1777289624 26203 0f5b414027aa691c5f9b21cf12550229 ""
-  "main.aux" 1777313923.08075 7287 ff916bdbe0d7440862b43bc8009db391 "pdflatex"
-  "main.out" 1777313923.0833 9569 ca56640cc4d43ba875882121be5ebeac "pdflatex"
-  "main.tex" 1777313916.1707 19348 146389f144b8084e60017ff8232a36e6 ""
-  "main.toc" 1777313923.0833 4195 72e869685be66da0f4e0474563239870 "pdflatex"
+  "main.aux" 1778233518.85014 7287 ff916bdbe0d7440862b43bc8009db391 "pdflatex"
+  "main.out" 1778233518.85114 9569 ca56640cc4d43ba875882121be5ebeac "pdflatex"
+  "main.tex" 1778233516.33513 19351 8aa038841f947b9f7185f5692854ac69 ""
+  "main.toc" 1778233518.85114 4195 72e869685be66da0f4e0474563239870 "pdflatex"
   "screenshots/dashboard_stats.png" 1777304048.48545 129948 332dd347462e29f034950a76d06b4c34 ""
   "screenshots/lesson_ui.png" 1777304103.7589 117368 5bd94a3e6b10c29cd7a53599bb8cca17 ""
   (generated)
