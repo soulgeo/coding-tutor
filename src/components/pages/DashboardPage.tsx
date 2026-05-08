@@ -17,18 +17,22 @@ const DashboardPage = () => {
     let active = true;
 
     const fetchUserData = async () => {
-      const user = await getCurrentUser();
-      if (user === null) {
-        return;
-      }
-      const docRef = doc(db, "users", user.uid);
-      const docSnap = await getDoc(docRef);
-      if (active) {
-        if (docSnap.exists()) {
-          setUserData(docSnap.data() as UserData);
-        } else {
-          console.error("User is not logged in");
+      try {
+        const user = await getCurrentUser();
+        if (user === null) {
+          return;
         }
+        const docRef = doc(db, "users", user.uid);
+        const docSnap = await getDoc(docRef);
+        if (active) {
+          if (docSnap.exists()) {
+            setUserData(docSnap.data() as UserData);
+          } else {
+            console.error("User document does not exist in Firestore");
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
       }
     };
 

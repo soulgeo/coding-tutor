@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 import type { Unit } from "../data/courseData";
+import { useAuth } from "./AuthContext";
 
 interface UnitContextType {
   units: Record<string, Unit> | null;
@@ -26,11 +27,13 @@ export function useUnits() {
 export const UnitProvider = ({ children }: Props) => {
   const [units, setUnits] = useState<Record<string, Unit> | null>(null);
   const [loading, setLoading] = useState(true);
+  const { userLoggedIn } = useAuth();
 
   useEffect(() => {
     let active = true;
 
     const fetchUnits = async () => {
+      setLoading(true);
       try {
         const colRef = collection(db, "units");
         const colSnap = await getDocs(colRef);
@@ -58,7 +61,7 @@ export const UnitProvider = ({ children }: Props) => {
     return () => {
       active = false;
     };
-  }, []);
+  }, [userLoggedIn]);
 
   const value = {
     units,

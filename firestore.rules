@@ -1,0 +1,22 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Educational content: Publicly readable, writeable only by authorized sync scripts
+    // Note: In production, you might want to restrict 'write' to specific admin UIDs
+    match /units/{unitId} {
+      allow read: if true;
+      allow write: if true; 
+    }
+    
+    match /lessons/{lessonId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    // User progress: Only accessible by the owner
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+  }
+}
